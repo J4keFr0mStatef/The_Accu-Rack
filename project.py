@@ -4,13 +4,13 @@ import json
 
 ########## API INTEGRATION AND DATA GET ############
 # base URL
-BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
+BASE_URL = "https://api.openweathermap.org/data/2.5/forecast?"
 # City Name
 CITY = "ruston"
 # API key
 API_KEY = "c6fac2b39ddd7e66e83a0be39bd11f52"
 # upadting the URL
-URL = BASE_URL + "q=" + CITY + "&appid=" + API_KEY
+URL = BASE_URL + "q=" + CITY + "&units=imperial" + "&appid=" + API_KEY
 # HTTP request
 response = requests.get(URL)
 # checking the status code of the request
@@ -20,11 +20,13 @@ if response.status_code == 200:
     # getting the main dict block
     main = data['main']
     # getting temperature
-    temperature = int((int(main['temp']) - 273.15) * 9/5 + 32)
+    temperature = int((int(main['temp'])
     # getting the humidity
     humidity = main['humidity']
     # getting the pressure
     pressure = main['pressure']
+    # getting the probability of precipitation
+    chance_rain = pop
     # weather report
     report = data['weather']
     print(f"{CITY:-^30}")
