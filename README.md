@@ -3,7 +3,8 @@ Final design project for CSC132.  The project idea is a coat hanger that recomme
 
 
 ### External Libraries used: ###
-"requests" library by Kenneth Reitz ©2017 
+"requests" library by Kenneth Reitz ©2017
+"geograpy3" library copyright GeograpyRealm ©2021
 
 ### API Documentation ###
 OpenWeatherMap by OpenWeather© 2012-2021
