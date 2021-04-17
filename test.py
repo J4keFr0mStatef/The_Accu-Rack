@@ -20,7 +20,7 @@ if response.status_code == 200:
     data = response.json()
     print(data)
     # getting the main dict block
-    main = data[]
+    main = data['main']
     # getting temperature
     temperature = main['temp']
     # getting the humidity
