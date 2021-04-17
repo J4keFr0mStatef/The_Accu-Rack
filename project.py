@@ -3,43 +3,90 @@
 
 import requests
 
-########## API INTEGRATION AND DATA GET ############
-# base URL
-BASE_URL = "https://api.openweathermap.org/data/2.5/forecast?"
-# City Name
-CITY = "ruston"
-# API key
-API_KEY = "c6fac2b39ddd7e66e83a0be39bd11f52"
-# updating the URL
-URL = BASE_URL + "q=" + CITY + "&units=imperial" + "&appid=" + API_KEY
-# HTTP request
-response = requests.get(URL)
-# checking the status code of the request
-if response.status_code == 200:
 
-    # getting data in the json format
-    data = response.json()
-    # getting the main dict block
-    list = data["list"]
-    info = dict(list[0])
+# Weather class for API integration and data processing
+class Weather:
+    # API key
+    API_KEY = "c6fac2b39ddd7e66e83a0be39bd11f52"
+    FORECASTER_URL = "https://api.openweathermap.org/data/2.5/forecast?"
 
-    main = info["main"]
-    # getting temperature
-    temperature = main['temp']
-    # getting the humidity
-    humidity = main['humidity']
-    # getting the pressure
-    pressure = main['pressure']
-    # getting the probability of precipitation
-    chance_rain = info['pop']
-    # weather report
-    report = info['weather']
-    print(f"{CITY:-^30}")
-    print(f"Temperature: {temperature}")
-    print(f"Humidity: {humidity}")
-    print(f"Pressure: {pressure}")
-    print(f"Weather Report: {report[0]['description']}")
-    print(f"Chance of Rain: {str(chance_rain * 100) + '%'}")
-else:
-    # showing the error message
-    print("Could not find city.")
+    def __init__(self, city):
+        self.city = city
+        self.info = {}
+
+    # accessor and mutator for city
+    @property
+    def city(self):
+        return self._city
+
+    @city.setter
+    def city(self, value):
+        value = str(value)
+        # TODO: See if we can check it among a dictionary of cities
+        self._city = value
+
+    # accessor and mutator for info
+    @property
+    def info(self):
+        return self._info
+
+    @info.setter
+    def info(self, value):
+        self._info = value
+
+    # function to ping the server and set all the required values
+    def initialize(self):
+        # format URL for the server request
+        URL = self.FORECASTER_URL + "q=" + self.city + "&units=imperial" + "&appid=" + self.API_KEY
+        response = requests.get(URL)
+        # check to see if the server responded
+        if response.status_code == 200:
+            # we have to manipulate the JSON to access the correct part of the dictionary
+            # that has the weather data we need
+            data = response.json()
+            list = data["list"]
+            self.info = dict(list[0])
+        else:
+            raise NameError("There was an invalid response from the OpenWeatherMap server")
+
+    # function to find the TEMPERATURE within the JSON file
+    def getTemp(self):
+        main = self.info["main"]
+        return main["temp"]
+
+    # function to find the HUMIDITY within the JSON file
+    def getHumidity(self):
+        main = self.info["main"]
+        return main["humidity"]
+
+    # function to find the PRESSURE within the JSON file
+    def getPressure(self):
+        main = self.info["main"]
+        return main["pressure"]
+
+    # function to find the CURRENT WEATHER within the JSON file
+    def getCurrent(self):
+        report = self.info["weather"]
+        return report[0]["description"]
+
+    # function to find the CHANCE OF RAIN within the JSON file
+    def getRainChance(self):
+        chance = self.info["pop"]
+        return str(chance * 100) + "%"
+
+    def __str__(self):
+        # always refresh data before printing
+        self.initialize()
+        s = f"{self.city:-^30}\n"
+        s += f"Temperature: {self.getTemp()}degF\n"
+        s += f"Humidity: {self.getHumidity()}%\n"
+        s += f"Pressure: {self.getPressure()}mbar\n"
+        s += f"Weather Report: {self.getCurrent()}\n"
+        s += f"Chance of Rain: {self.getRainChance()}\n"
+        return s
+
+########################################################################
+
+weatherData = Weather("ruston")
+weatherData.initialize()
+print(weatherData)
