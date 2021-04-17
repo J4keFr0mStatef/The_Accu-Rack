@@ -1,3 +1,12 @@
+######################################################################################
+# GUI for the Accurack                                                               #
+# ####################################################################################
+# TODO: Complete general structure for the GUI                                       #
+# TODO: Retrieve info from the class using the API                                   #
+# TODO: Interaction features                                                         #
+# TODO: Coat locations and hook funcionality (likely to be moved somewhere else)     #
+######################################################################################
+
 from tkinter import *
 
 class Gui(Frame):
