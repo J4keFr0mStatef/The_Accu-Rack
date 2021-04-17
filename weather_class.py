@@ -3,11 +3,11 @@
 
 import requests
 
-
 # Weather class for API integration and data processing
 class Weather:
     # API key
     API_KEY = "c6fac2b39ddd7e66e83a0be39bd11f52"
+    # Base request URL for API
     FORECASTER_URL = "https://api.openweathermap.org/data/2.5/forecast?"
 
     def __init__(self, city):
