@@ -1,6 +1,7 @@
+## this file is a reference to how the api get works
+## and is not intended for use
 
 import requests
-import json
 
 ########## API INTEGRATION AND DATA GET ############
 # base URL
