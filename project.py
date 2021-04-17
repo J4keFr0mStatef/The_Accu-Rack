@@ -20,10 +20,15 @@ if response.status_code == 200:
     # getting data in the json format
     data = response.json()
     # getting the main dict block
+<<<<<<< Updated upstream
     list = data["list"]
     info = dict(list[0])
 
     main = info["main"]
+=======
+    print(data)
+    main = data["main"]
+>>>>>>> Stashed changes
     # getting temperature
     temperature = main['temp']
     # getting the humidity
