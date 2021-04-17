@@ -1,6 +1,7 @@
+## this file is a reference to how the api get works
+## and is not intended for use
 
 import requests
-import json
 
 ########## API INTEGRATION AND DATA GET ############
 # base URL
@@ -19,7 +20,7 @@ if response.status_code == 200:
     data = response.json()
     print(data)
     # getting the main dict block
-    main = data[]
+    main = data['main']
     # getting temperature
     temperature = main['temp']
     # getting the humidity
