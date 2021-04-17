@@ -3,8 +3,10 @@ Final design project for CSC132.  The project idea is a coat hanger that recomme
 
 
 ### External Libraries used: ###
-"requests" library by Kenneth Reitz ©2017
-"geograpy3" library copyright GeograpyRealm ©2021
+"requests" library by Kenneth Reitz ©2017               https://docs.python-requests.org/en/master/
+"geograpy3" library copyright GeographyRealm ©2021      https://pypi.org/project/geograpy3/
+"jellyfish" library by James Turk and Michael Stephens  https://jellyfish.readthedocs.io/en/latest/
+
 
 ### API Documentation ###
 OpenWeatherMap by OpenWeather© 2012-2021
