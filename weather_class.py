@@ -13,6 +13,7 @@ class Weather:
     def __init__(self, city):
         self.city = city
         self.info = {}
+        self.refresh = True
 
     # accessor and mutator for city
     @property
@@ -35,7 +36,8 @@ class Weather:
         self._info = value
 
     # function to ping the server and set all the required values
-    def initialize(self):
+    # used in all the get() functions to ensure most recent data
+    def ping(self):
         # format URL for the server request
         URL = self.FORECASTER_URL + "q=" + self.city + "&units=imperial" + "&appid=" + self.API_KEY
         response = requests.get(URL)
@@ -48,35 +50,45 @@ class Weather:
             self.info = dict(list[0])
         else:
             raise NameError("There was an invalid response from the OpenWeatherMap server")
-
+    
     # function to find the TEMPERATURE within the JSON file
     def getTemp(self):
+        if self.refresh:
+            self.ping()
         main = self.info["main"]
         return main["temp"]
 
     # function to find the HUMIDITY within the JSON file
     def getHumidity(self):
+        if self.refresh:
+            self.ping()
         main = self.info["main"]
         return main["humidity"]
 
     # function to find the PRESSURE within the JSON file
     def getPressure(self):
+        if self.refresh:
+            self.ping()
         main = self.info["main"]
         return main["pressure"]
 
     # function to find the CURRENT WEATHER within the JSON file
     def getCurrent(self):
+        if self.refresh:
+            self.ping()
         report = self.info["weather"]
         return report[0]["description"]
 
     # function to find the CHANCE OF RAIN within the JSON file
     def getRainChance(self):
+        if self.refresh:
+            self.ping()
         chance = self.info["pop"]
         return str(chance * 100) + "%"
 
     def __str__(self):
-        # always refresh data before printing
-        self.initialize()
+        # always refresh data before printing it
+        self.ping()
         s = f"{self.city:-^30}\n"
         s += f"Temperature: {self.getTemp()}degF\n"
         s += f"Humidity: {self.getHumidity()}%\n"
@@ -88,5 +100,4 @@ class Weather:
 ########################################################################
 
 weatherData = Weather("ruston")
-weatherData.initialize()
 print(weatherData)
