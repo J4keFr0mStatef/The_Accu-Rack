@@ -58,7 +58,7 @@ def getReminder():
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
        
-        reminders.append(event['summary'])
+        reminders.append(str(event['summary']))
        
     return reminders
 
