@@ -27,8 +27,8 @@ class Application(Frame):
         Frame3 = Frame(master, bg="aquamarine")
         Frame3.grid(row = 0, column = 2, rowspan = 6, columnspan = 3, sticky = W+E+N+S)
         Label3 = Label(Frame3, text = "Reminders", bg = "aquamarine")
-        Label3.pack()
-        Label3.place(anchor = NE)
+        Label3.place()
+        
         
 
 root = Tk()
