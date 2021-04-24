@@ -12,12 +12,24 @@ class Application(Frame):
             self.master.columnconfigure(c, weight=1)
             Button(master, text="Button {0}".format(c)).grid(row=6,column=c,sticky=E+W)
 
-        Frame1 = Frame(master, bg="red")
-        Frame1.grid(row = 0, column = 0, rowspan = 2, columnspan = 2, sticky = W+E+N+S) 
-        Frame2 = Frame(master, bg="blue")
+        Frame1 = Frame(master, bg="darkturquoise")
+        Frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S) 
+        Label1 = Label(Frame1, text = "Temperature", bg = "darkturquoise")
+        Label1.pack()
+
+
+        Frame2 = Frame(master, bg="SlateBlue2")
         Frame2.grid(row = 3, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S)
-        Frame3 = Frame(master, bg="green")
+        Label2 = Label(Frame2, text = "Coat recommendation", bg = "SlateBlue2")
+        Label2.pack()
+
+
+        Frame3 = Frame(master, bg="aquamarine")
         Frame3.grid(row = 0, column = 2, rowspan = 6, columnspan = 3, sticky = W+E+N+S)
+        Label3 = Label(Frame3, text = "Reminders", bg = "aquamarine")
+        Label3.pack()
+        Label3.place(anchor = NE)
+        
 
 root = Tk()
 root.geometry("400x200+200+200")
