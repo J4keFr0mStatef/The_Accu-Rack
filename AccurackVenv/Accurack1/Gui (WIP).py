@@ -9,6 +9,7 @@
 
 from tkinter import *
 
+
 class Gui(Frame):
     def __init__(self, master):
         Frame.__init__(self, master, bg = "grey")
@@ -18,7 +19,8 @@ class Gui(Frame):
 
     def setUpGui(self):
         # label
-        self.display = Label(self, text = "{put city here}", anchor = "center", bg = "white",\
+        
+        self.display = Label(self, text = "{}".format(city), anchor = "center", bg = "white",\
             height = 1, width = 15, font = ("Courier New", 45))
         self.display.grid(row  = 0, column = 0, columnspan = 4,\
             sticky = N + E + W + S)
@@ -34,10 +36,15 @@ class Gui(Frame):
             highlightthickness = 1)
         
         self.pack(fill = BOTH, expand = 1)
+#####################IMPORTANT VARIABLES######################
+
+CITY = input("What city")
+
 
 
 
 ############################MAIN##############################
+
 window = Tk()
 
 window.title("The Accurack")
