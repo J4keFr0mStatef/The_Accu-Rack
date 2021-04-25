@@ -1,59 +1,62 @@
+
+############################### KEYBOARD GUI #################################
+
 import tkinter as tk
 from tkinter import ttk
+import requests
 
 key = tk.Tk()  # key window name
 key.title('Keyboard')  # title Name
 
-# key.iconbitmap('add icon link And Directory name')    # icon add
+exp = " "   # global variable 
 
-# function coding start 
-
-
-exp = " "          # global variable 
-# showing all data in display 
-
+#Showing all data in display 
 def press(num):
     global exp
     exp=exp + str(num)
-    equation.set(exp)
+    CITY.set(exp)
 
-
-
-# function clear button
+#Function clear button
 
 def clear():
     global exp
     exp = " "
-    equation.set(exp)
-
-
+    CITY.set(exp)
 
 # Enter Button Function
 
 def action():
-    CITY = exp
     exp = ""
-    return CITY
+    # base URL
+    BASE_URL = "https://api.openweathermap.org/data/2.5/forecast?"
 
-
+    # API key for open weather
+    API_KEY = "c6fac2b39ddd7e66e83a0be39bd11f52"
+    # updating the URL
+    URL = BASE_URL + "q=" + CITY.get() + "&units=imperial" + "&appid=" + API_KEY
+    # HTTP request
+    response = requests.get(URL)
+# checking the status code of the request
+    if response.status_code == 200: 
+        key.destroy()
+    else:
+        CITY.set("COULD NOT FIND CITY")
 
 # Size window size
+
 key.geometry('1010x250')         # normal size
 key.maxsize(width=1010, height=250)      # maximum size
 key.minsize(width= 1010 , height = 250)     # minimum size
 # end window size
 
-key.configure(bg = 'green')    #  add background color
+key.configure(bg = 'blue')    #  add background color
 
-# entry box
-equation = tk.StringVar()
-Dis_entry = ttk.Entry(key,state= 'readonly',textvariable = equation)
+# Entry box and setup for CITY variable used for API and GUI.
+CITY = tk.StringVar()
+Dis_entry = ttk.Entry(key,state= 'readonly',textvariable = CITY)
 Dis_entry.grid(rowspan= 1 , columnspan = 100, ipadx = 999 , ipady = 20)
-# end entry box
 
-# add all button line wise 
-
-# First Line Button
+# First Line Buttons
 
 q = ttk.Button(key,text = 'Q' , width = 6, command = lambda : press('Q'))
 q.grid(row = 1 , column = 0, ipadx = 6 , ipady = 10)
@@ -88,9 +91,7 @@ P.grid(row = 1 , column = 9, ipadx = 6 , ipady = 10)
 clear = ttk.Button(key,text = 'Clear' , width = 6, command = clear)
 clear.grid(row = 1 , column = 13, ipadx = 20 , ipady = 10)
 
-# Second Line Button
-
-
+# Second Line Buttons
 
 A = ttk.Button(key,text = 'A' , width = 6, command = lambda : press('A'))
 A.grid(row = 2 , column = 0, ipadx = 6 , ipady = 10)
@@ -124,9 +125,9 @@ L = ttk.Button(key,text = 'L' , width = 6, command = lambda : press('L'))
 L.grid(row = 2 , column = 8, ipadx = 6 , ipady = 10)
 
 enter = ttk.Button(key,text = 'Enter' , width = 6, command = action)
-enter.grid(row = 2 , columnspan = 75, ipadx = 85 , ipady = 10)
+enter.grid(row = 2 , column = 13, ipadx = 20 , ipady = 10)
 
-# third line Button
+#Third line Buttons
 
 Z = ttk.Button(key,text = 'Z' , width = 6, command = lambda : press('Z'))
 Z.grid(row = 3 , column = 0, ipadx = 6 , ipady = 10)
@@ -155,27 +156,21 @@ M = ttk.Button(key,text = 'M' , width = 6, command = lambda : press('M'))
 M.grid(row = 3 , column = 6, ipadx = 6 , ipady = 10)
 
 
-
-
 shift = ttk.Button(key,text = 'Shift' , width = 6, command = lambda : press('Shift'))
 shift.grid(row = 3 , column = 13, ipadx = 20 , ipady = 10)
 
 
-#Fourth Line Button
-
-
+#Fourth Line Buttons
 
 space = ttk.Button(key,text = 'Space' , width = 6, command = lambda : press(' '))
-space.grid(row = 4 , columnspan = 14 , ipadx = 160 , ipady = 10)
+space.grid(row = 4 , columnspan = 10 , ipadx = 120, ipady = 10)
 
 
 
+key.mainloop()  # loop GUI
 
-
-key.mainloop()  # using ending point
-
+################################## MAIN GUI ########################################
 from tkinter import *
-
 class Application(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master)
@@ -191,10 +186,10 @@ class Application(Frame):
         Frame1 = Frame(master, bg="darkturquoise")
         Frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S) 
 
-        Label1A = Label(Frame1, text = "Temperature", bg = "darkturquoise")
+        Label1A = Label(Frame1, text = "{}".format(CITY.get()), bg = "darkturquoise")
         Label1A.pack()
 
-        Label1B = Label(Frame1, text = "test", bg = "darkturquoise")
+        Label1B = Label(Frame1, text = "Temperature and weather status here", bg = "darkturquoise")
         Label1B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
 
@@ -204,7 +199,7 @@ class Application(Frame):
         Label2A = Label(Frame2, text = "Coat recommendation", bg = "SlateBlue2")
         Label2A.pack()
 
-        Label2B = Label(Frame2, text = "test", bg = "SlateBlue2")
+        Label2B = Label(Frame2, text = "Which coat here", bg = "SlateBlue2")
         Label2B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
 
@@ -215,7 +210,7 @@ class Application(Frame):
         Label3A = Label(Frame3, text = "Reminders", bg = "aquamarine")
         Label3A.pack()
 
-        Label3B = Label(Frame3, text = "test", bg = "aquamarine")
+        Label3B = Label(Frame3, text = "reminder", bg = "aquamarine")
         Label3B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
         
         
@@ -225,3 +220,37 @@ Tk.geometry("400x200+200+200")
 app = Application(master=Tk)
 app.mainloop()
 
+
+
+
+
+########## WEATHER API INTEGRATION AND DATA GET ############
+#TODO: BUGGED OUT CODE :( FIX IT 
+
+
+# if response.status_code == 200:
+
+#     # getting data in the json format
+#     data = response.json()
+#     # getting the main dict block
+#     print(data)
+#     main = data["main"]
+#     # getting temperature
+#     temperature = main['temp']
+#     # getting the humidity
+#     humidity = main['humidity']
+#     # getting the pressure
+#     pressure = main['pressure']
+#     # getting the probability of precipitation
+#     chance_rain = info['pop']
+#     # weather report
+#     report = info['weather']
+#     print(f"{CITY:-^30}")
+#     print(f"Temperature: {temperature}")
+#     print(f"Humidity: {humidity}")
+#     print(f"Pressure: {pressure}")
+#     print(f"Weather Report: {report[0]['description']}")
+#     print(f"Chance of Rain: {str(chance_rain * 100) + '%'}")
+# else:
+#     # showing the error message
+#     print("Could not find city.")
