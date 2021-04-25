@@ -1,46 +1,8 @@
-from tkinter import *
-
-class Application(Frame):
-    def __init__(self, master=None):
-        Frame.__init__(self, master)
-        self.grid()
-        self.master.title("Grid Manager")
-
-        for r in range(6):
-            self.master.rowconfigure(r, weight=1)    
-        for c in range(5):
-            self.master.columnconfigure(c, weight=1)
-            Button(master, text="Button {0}".format(c)).grid(row=6,column=c,sticky=E+W)
-
-        Frame1 = Frame(master, bg="darkturquoise")
-        Frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S) 
-        Label1 = Label(Frame1, text = "Temperature", bg = "darkturquoise")
-        Label1.pack()
-
-
-        Frame2 = Frame(master, bg="SlateBlue2")
-        Frame2.grid(row = 3, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S)
-        Label2 = Label(Frame2, text = "Coat recommendation", bg = "SlateBlue2")
-        Label2.pack()
-
-
-        Frame3 = Frame(master, bg="aquamarine")
-        Frame3.grid(row = 0, column = 2, rowspan = 6, columnspan = 3, sticky = W+E+N+S)
-        Label3 = Label(Frame3, text = "Reminders", bg = "aquamarine")
-        Label3.place()
-        
-        
-
-root = Tk()
-root.geometry("400x200+200+200")
-app = Application(master=root)
-app.mainloop()
-
 import tkinter as tk
 from tkinter import ttk
 
 key = tk.Tk()  # key window name
-key.title('Keyboard By Danish')  # title Name
+key.title('Keyboard')  # title Name
 
 # key.iconbitmap('add icon link And Directory name')    # icon add
 
@@ -54,7 +16,7 @@ def press(num):
     global exp
     exp=exp + str(num)
     equation.set(exp)
-# end 
+
 
 
 # function clear button
@@ -64,28 +26,14 @@ def clear():
     exp = " "
     equation.set(exp)
 
-# end 
 
 
-# Enter Button Work Next line Function
+# Enter Button Function
 
 def action():
-  exp = " Next Line : "
-  equation.set(exp)
-
-# end function coding
-
-
-# Tab Button Function 
-
-
-def Tab():
-  exp = " TAB : "
-  equation.set(exp)
-
-# END Tab Button Fucntion
-
-
+    CITY = exp
+    exp = ""
+    return CITY
 
 
 
@@ -137,16 +85,6 @@ O.grid(row = 1 , column = 8, ipadx = 6 , ipady = 10)
 P = ttk.Button(key,text = 'P' , width = 6, command = lambda : press('P'))
 P.grid(row = 1 , column = 9, ipadx = 6 , ipady = 10)
 
-cur = ttk.Button(key,text = '{' , width = 6, command = lambda : press('{'))
-cur.grid(row = 1 , column = 10 , ipadx = 6 , ipady = 10)
-
-cur_c = ttk.Button(key,text = '}' , width = 6, command = lambda : press('}'))
-cur_c.grid(row = 1 , column = 11, ipadx = 6 , ipady = 10)
-
-back_slash = ttk.Button(key,text = '\\' , width = 6, command = lambda : press('\\'))
-back_slash.grid(row = 1 , column = 12, ipadx = 6 , ipady = 10)
-
-
 clear = ttk.Button(key,text = 'Clear' , width = 6, command = clear)
 clear.grid(row = 1 , column = 13, ipadx = 20 , ipady = 10)
 
@@ -156,8 +94,6 @@ clear.grid(row = 1 , column = 13, ipadx = 20 , ipady = 10)
 
 A = ttk.Button(key,text = 'A' , width = 6, command = lambda : press('A'))
 A.grid(row = 2 , column = 0, ipadx = 6 , ipady = 10)
-
-
 
 S = ttk.Button(key,text = 'S' , width = 6, command = lambda : press('S'))
 S.grid(row = 2 , column = 1, ipadx = 6 , ipady = 10)
@@ -186,15 +122,6 @@ K.grid(row = 2 , column = 7, ipadx = 6 , ipady = 10)
 
 L = ttk.Button(key,text = 'L' , width = 6, command = lambda : press('L'))
 L.grid(row = 2 , column = 8, ipadx = 6 , ipady = 10)
-
-
-semi_co = ttk.Button(key,text = ';' , width = 6, command = lambda : press(';'))
-semi_co.grid(row = 2 , column = 9, ipadx = 6 , ipady = 10)
-
-
-d_colon = ttk.Button(key,text = '"' , width = 6, command = lambda : press('"'))
-d_colon.grid(row = 2 , column = 10, ipadx = 6 , ipady = 10)
-
 
 enter = ttk.Button(key,text = 'Enter' , width = 6, command = action)
 enter.grid(row = 2 , columnspan = 75, ipadx = 85 , ipady = 10)
@@ -228,64 +155,73 @@ M = ttk.Button(key,text = 'M' , width = 6, command = lambda : press('M'))
 M.grid(row = 3 , column = 6, ipadx = 6 , ipady = 10)
 
 
-left = ttk.Button(key,text = '<' , width = 6, command = lambda : press('<'))
-left.grid(row = 3 , column = 7, ipadx = 6 , ipady = 10)
 
-
-right = ttk.Button(key,text = '>' , width = 6, command = lambda : press('>'))
-right.grid(row = 3 , column = 8, ipadx = 6 , ipady = 10)
-
-
-slas = ttk.Button(key,text = '/' , width = 6, command = lambda : press('/'))
-slas.grid(row = 3 , column = 9, ipadx = 6 , ipady = 10)
-
-
-q_mark = ttk.Button(key,text = '?' , width = 6, command = lambda : press('?'))
-q_mark.grid(row = 3 , column = 10, ipadx = 6 , ipady = 10)
-
-
-coma = ttk.Button(key,text = ',' , width = 6, command = lambda : press(','))
-coma.grid(row = 3 , column = 11, ipadx = 6 , ipady = 10)
-
-dot = ttk.Button(key,text = '.' , width = 6, command = lambda : press('.'))
-dot.grid(row = 3 , column = 12, ipadx = 6 , ipady = 10)
 
 shift = ttk.Button(key,text = 'Shift' , width = 6, command = lambda : press('Shift'))
 shift.grid(row = 3 , column = 13, ipadx = 20 , ipady = 10)
 
+
 #Fourth Line Button
 
 
-ctrl = ttk.Button(key,text = 'Ctrl' , width = 6, command = lambda : press('Ctrl'))
-ctrl.grid(row = 4 , column = 0, ipadx = 6 , ipady = 10)
-
-
-Fn = ttk.Button(key,text = 'Fn' , width = 6, command = lambda : press('Fn'))
-Fn.grid(row = 4 , column = 1, ipadx = 6 , ipady = 10)
-
-
-window = ttk.Button(key,text = 'Window' , width = 6, command = lambda : press('Window'))
-window.grid(row = 4 , column = 2 , ipadx = 6 , ipady = 10)
-
-Alt = ttk.Button(key,text = 'Alt' , width = 6, command = lambda : press('Alt'))
-Alt.grid(row = 4 , column = 3 , ipadx = 6 , ipady = 10)
 
 space = ttk.Button(key,text = 'Space' , width = 6, command = lambda : press(' '))
 space.grid(row = 4 , columnspan = 14 , ipadx = 160 , ipady = 10)
 
-Alt_gr = ttk.Button(key,text = 'Alt Gr' , width = 6, command = lambda : press('Alt Gr'))
-Alt_gr.grid(row = 4 , column = 10 , ipadx = 6 , ipady = 10)
 
-open_b = ttk.Button(key,text = '(' , width = 6, command = lambda : press('('))
-open_b.grid(row = 4 , column = 11 , ipadx = 6 , ipady = 10)
-
-close_b = ttk.Button(key,text = ')' , width = 6, command = lambda : press(')'))
-close_b.grid(row = 4 , column = 12 , ipadx = 6 , ipady = 10)
-
-
-tap = ttk.Button(key,text = 'Tab' , width = 6, command = Tab)
-tap.grid(row = 4 , column = 13 , ipadx = 20 , ipady = 10)
 
 
 
 key.mainloop()  # using ending point
+
+from tkinter import *
+
+class Application(Frame):
+    def __init__(self, master=None):
+        Frame.__init__(self, master)
+        self.grid()
+        self.master.title("Grid Manager")
+
+        for r in range(6):
+            self.master.rowconfigure(r, weight=1)    
+        for c in range(5):
+            self.master.columnconfigure(c, weight=1)
+            Button(master, text="Button {0}".format(c)).grid(row=6,column=c,sticky=E+W)
+
+        Frame1 = Frame(master, bg="darkturquoise")
+        Frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S) 
+
+        Label1A = Label(Frame1, text = "Temperature", bg = "darkturquoise")
+        Label1A.pack()
+
+        Label1B = Label(Frame1, text = "test", bg = "darkturquoise")
+        Label1B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
+
+
+        Frame2 = Frame(master, bg="SlateBlue2")
+        Frame2.grid(row = 3, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S)
+
+        Label2A = Label(Frame2, text = "Coat recommendation", bg = "SlateBlue2")
+        Label2A.pack()
+
+        Label2B = Label(Frame2, text = "test", bg = "SlateBlue2")
+        Label2B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
+
+
+        Frame3 = Frame(master, bg="aquamarine")
+        Frame3.grid(row = 0, column = 2, rowspan = 6, columnspan = 3, sticky = W+E+N+S)
+
+
+        Label3A = Label(Frame3, text = "Reminders", bg = "aquamarine")
+        Label3A.pack()
+
+        Label3B = Label(Frame3, text = "test", bg = "aquamarine")
+        Label3B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
+        
+        
+
+Tk = Tk()
+Tk.geometry("400x200+200+200")
+app = Application(master=Tk)
+app.mainloop()
+
