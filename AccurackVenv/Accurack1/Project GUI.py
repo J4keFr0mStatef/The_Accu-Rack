@@ -106,7 +106,7 @@ def action():
     URL = BASE_URL + "q=" + CITY.get() + "&units=imperial" + "&appid=" + API_KEY
     # HTTP request
     response = requests.get(URL)
-# checking the status code of the request
+    # checking the status code of the request
     if response.status_code == 200: 
         keyboard.destroy()
     else:
