@@ -101,12 +101,15 @@ class Weather:
 
 ######## REQUIRED LIBRARIES FOR GOOGLE CALENDAR API ########
 
-import datetime 
+
+import datetime
+import time
 import pickle
 import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+
 
 ################ GOOGLE CALENDAR API GET #######################
 
@@ -158,8 +161,12 @@ def getReminder():
 
     else:
         for event in events:
-            start = event['start'].get('dateTime', event['start'].get('date'))
-            reminders.append(str(event['summary']))
+            time1 = str(event['start']['dateTime'])
+            dt = datetime.datetime.fromisoformat(time1)
+            time2 = dt.strftime("%I:%M %p")
+            
+           
+            reminders.append(str(event['summary'])+" @ "+str(time2))
         reminders = "\n".join(reminders)
 
     return reminders
@@ -174,6 +181,7 @@ reminders = getReminder()
 import tkinter as tk
 from tkinter import ttk
 import requests
+from time import sleep
 
 
 
@@ -377,7 +385,7 @@ class Application(Frame):
         Frame2 = Frame(master, bg="SlateBlue2")
         Frame2.grid(row = 3, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S)
 
-        Label2A = Label(Frame2, text = "Coat recommendation", bg = "SlateBlue2")
+        Label2A = Label(Frame2, text = "Coat Recommendation", bg = "SlateBlue2")
         Label2A.pack()
 
         Label2B = Label(Frame2, text = "Which coat here", bg = "SlateBlue2")
@@ -388,7 +396,7 @@ class Application(Frame):
         Frame3.grid(row = 0, column = 2, rowspan = 6, columnspan = 3, sticky = W+E+N+S)
 
 
-        Label3A = Label(Frame3, text = "Reminders", bg = "aquamarine")
+        Label3A = Label(Frame3, text = "Reminders {}".format(datetime.datetime.now().today().strftime("%A %B %d")), bg = "aquamarine")
         Label3A.pack()
 
         Label3B = Label(Frame3, text = "{}".format(reminders), bg = "aquamarine")
@@ -397,7 +405,8 @@ class Application(Frame):
         
 
 Tk = Tk()
-Tk.geometry("1000x1000")
+Tk.geometry("800x480")
+Tk.config(cursor = "none")
 app = Application(master=Tk)
 app.mainloop()
 
