@@ -229,129 +229,132 @@ def keybaordGUI():
 
     keyboard = tk.Tk()  # key window name
     keyboard.title('Keyboard')  # title Name
+    keyboard.attributes("-fullscreen", True)
+    keyboard.config(cursor = "none")
 
     global exp
     exp = " "   # global variable 
 
     # Size window 
-    keyboard.geometry('740x250')
+    keyboard.geometry('800x480')
 
     #Window color
-    keyboard.configure(bg = 'blue')   
+    keyboard.configure(bg = 'blue')
 
     # Entry box and setup for CITY variable used for API and GUI.
     global CITY
     CITY = tk.StringVar()
     Dis_entry = ttk.Entry(keyboard,state= 'readonly',textvariable = CITY)
-    Dis_entry.grid(rowspan= 1 , columnspan = 100, ipadx = 999 , ipady = 20)
+    Dis_entry.grid(rowspan = 1, columnspan = 330, ipadx = 330, ipady = 40)
 
     # First Line Buttons
-    q = ttk.Button(keyboard,text = 'Q' , width = 6, command = lambda : press('Q'))
-    q.grid(row = 1 , column = 0, ipadx = 6 , ipady = 10)
+    q = ttk.Button(keyboard,text = 'Q' , width = 7, command = lambda : press('Q'))
+    q.grid(row = 1 , column = 0, ipadx = 7 , ipady = 20)
 
-    w = ttk.Button(keyboard,text = 'W' , width = 6, command = lambda : press('W'))
-    w.grid(row = 1 , column = 1, ipadx = 6 , ipady = 10)
+    w = ttk.Button(keyboard,text = 'W' , width = 7, command = lambda : press('W'))
+    w.grid(row = 1 , column = 1, ipadx = 7 , ipady = 20)
 
-    E = ttk.Button(keyboard,text = 'E' , width = 6, command = lambda : press('E'))
-    E.grid(row = 1 , column = 2, ipadx = 6 , ipady = 10)
+    E = ttk.Button(keyboard,text = 'E' , width = 7, command = lambda : press('E'))
+    E.grid(row = 1 , column = 2, ipadx = 7 , ipady = 20)
 
-    R = ttk.Button(keyboard,text = 'R' , width = 6, command = lambda : press('R'))
-    R.grid(row = 1 , column = 3, ipadx = 6 , ipady = 10)
+    R = ttk.Button(keyboard,text = 'R' , width = 7, command = lambda : press('R'))
+    R.grid(row = 1 , column = 3, ipadx = 7 , ipady = 20)
 
-    T = ttk.Button(keyboard,text = 'T' , width = 6, command = lambda : press('T'))
-    T.grid(row = 1 , column = 4, ipadx = 6 , ipady = 10)
+    T = ttk.Button(keyboard,text = 'T' , width = 7, command = lambda : press('T'))
+    T.grid(row = 1 , column = 4, ipadx = 7 , ipady = 20)
+    
+    Y = ttk.Button(keyboard,text = 'Y' , width = 7, command = lambda : press('Y'))
+    Y.grid(row = 1 , column = 5, ipadx = 7 , ipady = 20)
 
-    Y = ttk.Button(keyboard,text = 'Y' , width = 6, command = lambda : press('Y'))
-    Y.grid(row = 1 , column = 5, ipadx = 6 , ipady = 10)
+    U = ttk.Button(keyboard,text = 'U' , width = 7, command = lambda : press('U'))
+    U.grid(row = 1 , column = 6, ipadx = 7 , ipady = 20)
 
-    U = ttk.Button(keyboard,text = 'U' , width = 6, command = lambda : press('U'))
-    U.grid(row = 1 , column = 6, ipadx = 6 , ipady = 10)
+    I = ttk.Button(keyboard,text = 'I' , width = 7, command = lambda : press('I'))
+    I.grid(row = 1 , column = 7, ipadx = 7 , ipady = 20)
 
-    I = ttk.Button(keyboard,text = 'I' , width = 6, command = lambda : press('I'))
-    I.grid(row = 1 , column = 7, ipadx = 6 , ipady = 10)
+    O = ttk.Button(keyboard,text = 'O' , width = 7, command = lambda : press('O'))
+    O.grid(row = 1 , column = 8, ipadx = 7 , ipady = 20)
 
-    O = ttk.Button(keyboard,text = 'O' , width = 6, command = lambda : press('O'))
-    O.grid(row = 1 , column = 8, ipadx = 6 , ipady = 10)
+    P = ttk.Button(keyboard,text = 'P' , width = 7, command = lambda : press('P'))
+    P.grid(row = 1 , column = 9, ipadx = 7 , ipady = 20)
 
-    P = ttk.Button(keyboard,text = 'P' , width = 6, command = lambda : press('P'))
-    P.grid(row = 1 , column = 9, ipadx = 6 , ipady = 10)
-
-    clear = ttk.Button(keyboard,text = 'Clear' , width = 6, command = clear)
-    clear.grid(row = 2 , column = 9, ipadx = 6 , ipady = 10)
+    clear = ttk.Button(keyboard,text = 'Clear' , width = 7, command = clear)
+    clear.grid(row = 2 , column = 9, ipadx = 7 , ipady = 20)
 
     # Second Line Buttons
-    A = ttk.Button(keyboard,text = 'A' , width = 6, command = lambda : press('A'))
-    A.grid(row = 2 , column = 0, ipadx = 6 , ipady = 10)
+    A = ttk.Button(keyboard,text = 'A' , width = 7, command = lambda : press('A'))
+    A.grid(row = 2 , column = 0, ipadx = 7 , ipady = 20)
 
-    S = ttk.Button(keyboard,text = 'S' , width = 6, command = lambda : press('S'))
-    S.grid(row = 2 , column = 1, ipadx = 6 , ipady = 10)
+    S = ttk.Button(keyboard,text = 'S' , width = 7, command = lambda : press('S'))
+    S.grid(row = 2 , column = 1, ipadx = 7 , ipady = 20)
 
-    D = ttk.Button(keyboard,text = 'D' , width = 6, command = lambda : press('D'))
-    D.grid(row = 2 , column = 2, ipadx = 6 , ipady = 10)
+    D = ttk.Button(keyboard,text = 'D' , width = 7, command = lambda : press('D'))
+    D.grid(row = 2 , column = 2, ipadx = 7 , ipady = 20)
 
-    F = ttk.Button(keyboard,text = 'F' , width = 6, command = lambda : press('F'))
-    F.grid(row = 2 , column = 3, ipadx = 6 , ipady = 10)
+    F = ttk.Button(keyboard,text = 'F' , width = 7, command = lambda : press('F'))
+    F.grid(row = 2 , column = 3, ipadx = 7 , ipady = 20)
 
-
-    G = ttk.Button(keyboard,text = 'G' , width = 6, command = lambda : press('G'))
-    G.grid(row = 2 , column = 4, ipadx = 6 , ipady = 10)
-
-
-    H = ttk.Button(keyboard,text = 'H' , width = 6, command = lambda : press('H'))
-    H.grid(row = 2 , column = 5, ipadx = 6 , ipady = 10)
+    G = ttk.Button(keyboard,text = 'G' , width = 7, command = lambda : press('G'))
+    G.grid(row = 2 , column = 4, ipadx = 7 , ipady = 20)
 
 
-    J = ttk.Button(keyboard,text = 'J' , width = 6, command = lambda : press('J'))
-    J.grid(row = 2 , column = 6, ipadx = 6 , ipady = 10)
+    H = ttk.Button(keyboard,text = 'H' , width = 7, command = lambda : press('H'))
+    H.grid(row = 2 , column = 5, ipadx = 7 , ipady = 20)
 
 
-    K = ttk.Button(keyboard,text = 'K' , width = 6, command = lambda : press('K'))
-    K.grid(row = 2 , column = 7, ipadx = 6 , ipady = 10)
+    J = ttk.Button(keyboard,text = 'J' , width = 7, command = lambda : press('J'))
+    J.grid(row = 2 , column = 6, ipadx = 7 , ipady = 20)
 
-    L = ttk.Button(keyboard,text = 'L' , width = 6, command = lambda : press('L'))
-    L.grid(row = 2 , column = 8, ipadx = 6 , ipady = 10)
+
+    K = ttk.Button(keyboard,text = 'K' , width = 7, command = lambda : press('K'))
+    K.grid(row = 2 , column = 7, ipadx = 7 , ipady = 20)
+
+    L = ttk.Button(keyboard,text = 'L' , width = 7, command = lambda : press('L'))
+    L.grid(row = 2 , column = 8, ipadx = 7 , ipady = 20)
 
 
 
     #Third line Buttons
-    Z = ttk.Button(keyboard,text = 'Z' , width = 6, command = lambda : press('Z'))
-    Z.grid(row = 3 , column = 1, ipadx = 6 , ipady = 10)
+    Z = ttk.Button(keyboard,text = 'Z' , width = 7, command = lambda : press('Z'))
+    Z.grid(row = 3 , column = 1, ipadx = 7 , ipady = 20)
 
 
-    X = ttk.Button(keyboard,text = 'X' , width = 6, command = lambda : press('X'))
-    X.grid(row = 3 , column = 2, ipadx = 6 , ipady = 10)
+    X = ttk.Button(keyboard,text = 'X' , width = 7, command = lambda : press('X'))
+    X.grid(row = 3 , column = 2, ipadx = 7 , ipady = 20)
 
 
-    C = ttk.Button(keyboard,text = 'C' , width = 6, command = lambda : press('C'))
-    C.grid(row = 3 , column = 3, ipadx = 6 , ipady = 10)
+    C = ttk.Button(keyboard,text = 'C' , width = 7, command = lambda : press('C'))
+    C.grid(row = 3 , column = 3, ipadx = 7 , ipady = 20)
 
 
-    V = ttk.Button(keyboard,text = 'V' , width = 6, command = lambda : press('V'))
-    V.grid(row = 3 , column = 4, ipadx = 6 , ipady = 10)
+    V = ttk.Button(keyboard,text = 'V' , width = 7, command = lambda : press('V'))
+    V.grid(row = 3 , column = 4, ipadx = 7 , ipady = 20)
 
-    B = ttk.Button(keyboard, text= 'B' , width = 6 , command = lambda : press('B'))
-    B.grid(row = 3 , column = 5, ipadx = 6 ,ipady = 10)
-
-
-    N = ttk.Button(keyboard,text = 'N' , width = 6, command = lambda : press('N'))
-    N.grid(row = 3 , column = 6, ipadx = 6 , ipady = 10)
+    B = ttk.Button(keyboard, text= 'B' , width = 7 , command = lambda : press('B'))
+    B.grid(row = 3 , column = 5, ipadx = 7 ,ipady = 20)
 
 
-    M = ttk.Button(keyboard,text = 'M' , width = 6, command = lambda : press('M'))
-    M.grid(row = 3 , column = 7, ipadx = 6 , ipady = 10)
+    N = ttk.Button(keyboard,text = 'N' , width = 7, command = lambda : press('N'))
+    N.grid(row = 3 , column = 6, ipadx = 7 , ipady = 20)
+
+
+    M = ttk.Button(keyboard,text = 'M' , width = 7, command = lambda : press('M'))
+    M.grid(row = 3 , column = 7, ipadx = 7 , ipady = 20)
 
 
     #Fourth Line Buttons
-    space = ttk.Button(keyboard,text = 'Space' , width = 6, command = lambda : press(' '))
+    space = ttk.Button(keyboard,text = 'Space' , width = 7, command = lambda : press(' '))
     space.grid(row = 4 , columnspan = 10 , ipadx = 116.5, ipady = 10)
 
-    enter = ttk.Button(keyboard,text = 'Enter' , width = 6, command = action)
-    enter.grid(row = 4, column = 9, ipadx = 6 , ipady = 10)
+    enter = ttk.Button(keyboard,text = 'Enter' , width = 7, command = action)
+    enter.grid(row = 4, column = 9, ipadx = 6 , ipady = 20)
 
     
 
 
     keyboard.mainloop() 
+
+
 
 #### MAIN CODE FOR KEYBOARD GUI ####
 keybaordGUI()
