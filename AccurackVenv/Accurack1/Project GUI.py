@@ -91,7 +91,6 @@ class Weather:
         s = ""
         s += f"Temperature: {self.getTemp()}degF\n"
         s += f"Humidity: {self.getHumidity()}%\n"
-        s += f"Pressure: {self.getPressure()}mbar\n"
         s += f"Weather Report: {self.getCurrent()}\n"
         s += f"Chance of Rain: {self.getRainChance()}\n"
         return s
@@ -166,7 +165,7 @@ def getReminder():
             time2 = dt.strftime("%I:%M %p")
             
            
-            reminders.append(str(event['summary'])+" @ "+str(time2))
+            reminders.append(str(event['summary'])+" - "+str(time2))
         reminders = "\n".join(reminders)
 
     return reminders
@@ -372,34 +371,34 @@ class Application(Frame):
             self.master.columnconfigure(c, weight=1)
             Button(master, text="Button {0}".format(c)).grid(row=6,column=c,sticky=E+W)
 
-        Frame1 = Frame(master, bg="darkturquoise")
+        Frame1 = Frame(master, bg="red2")
         Frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S) 
 
-        Label1A = Label(Frame1, text = "{}".format(CITY.get()), font = "times 20 bold", bg = "darkturquoise")
+        Label1A = Label(Frame1, text = "{}".format(CITY.get()), font = "times 20 bold", bg = "red2")
         Label1A.pack()
 
-        Label1B = Label(Frame1, text = "{}".format(weatherData),font = "times 20", bg = "darkturquoise")
+        Label1B = Label(Frame1, text = "{}".format(weatherData),font = "times 20", bg = "red2")
         Label1B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
 
-        Frame2 = Frame(master, bg="SlateBlue2")
+        Frame2 = Frame(master, bg="red2")
         Frame2.grid(row = 3, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S)
 
-        Label2A = Label(Frame2, text = "Coat Recommendation", font = "times 20 bold", bg = "SlateBlue2")
+        Label2A = Label(Frame2, text = "Coat Recommendation", font = "times 20 bold", bg = "red2")
         Label2A.pack()
 
-        Label2B = Label(Frame2, text = "Which coat here", font = "times 20", bg = "SlateBlue2")
+        Label2B = Label(Frame2, text = "Which coat here", font = "times 20", bg = "red2")
         Label2B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
 
-        Frame3 = Frame(master, bg="aquamarine")
+        Frame3 = Frame(master, bg="blue2")
         Frame3.grid(row = 0, column = 2, rowspan = 6, columnspan = 3, sticky = W+E+N+S)
 
 
-        Label3A = Label(Frame3, text = "Reminders {}".format(datetime.datetime.now().today().strftime("%A %B %d")), font = "times 20 bold", bg = "aquamarine")
+        Label3A = Label(Frame3, text = "Reminders {}".format(datetime.datetime.now().today().strftime("%A %B %d")), font = "times 20 bold", bg = "blue2")
         Label3A.pack()
 
-        Label3B = Label(Frame3, text = "{}".format(reminders), font = "times 20",bg = "aquamarine")
+        Label3B = Label(Frame3, text = "{}".format(reminders), font = "times 20",bg = "blue2")
         Label3B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
         
         
