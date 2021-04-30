@@ -118,7 +118,7 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 #VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 #Immensely important that this file is correctly located on the machine. Otherwise the API will fail.
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-CREDENTIALS_FILE = 'C:\google calendar api\credentials.json'
+CREDENTIALS_FILE = 'Users\Jake\Desktop\credentials.json'
 
 #Function will verify and allow access to google calendar
 def get_calendar_service():
@@ -351,6 +351,7 @@ class Application(Frame):
             self.master.columnconfigure(c, weight=1)
             Button(master, text="Button {0}".format(c)).grid(row=6,column=c,sticky=E+W)
 
+    def setup(self):
         Frame1 = Frame(master, bg="red2")
         Frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S) 
 

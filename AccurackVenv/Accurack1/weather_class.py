@@ -98,6 +98,9 @@ class Weather:
         return s
 
 ########################################################################
+def main():
+    weatherData = Weather("ruston")
+    print(weatherData)
 
-weatherData = Weather("ruston")
-print(weatherData)
+if __name__ == '__main__':
+    main()

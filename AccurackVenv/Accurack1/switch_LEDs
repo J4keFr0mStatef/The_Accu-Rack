@@ -1,8 +1,8 @@
 import RPi.GPIO as GPIO
 from time import delay
 
-coats = {"umbrella": 4, "raincoat": 25, "light coat": 24, "heavy coat":5}
-leds = {"umbrella": 17, "raincoat": 16, "light coat": 13, "heavy coat":12}
+coats = {"umbrella": 4, "raincoat": 25, "light coat": 24, "heavy coat": 5}
+leds = {"umbrella": 17, "raincoat": 16, "light coat": 13, "heavy coat": 12}
 
 GPIO.setmode(GPIO.BCM)
 # setup the GPIO for the limit switches
