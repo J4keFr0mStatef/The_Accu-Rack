@@ -56,21 +56,21 @@ class Weather:
         if self.refresh:
             self.ping()
         main = self.info["main"]
-        return main["temp"]
+        return int(main["temp"])
 
     # function to find the HUMIDITY within the JSON file
     def getHumidity(self):
         if self.refresh:
             self.ping()
         main = self.info["main"]
-        return main["humidity"]
+        return int(main["humidity"])
 
     # function to find the PRESSURE within the JSON file
     def getPressure(self):
         if self.refresh:
             self.ping()
         main = self.info["main"]
-        return main["pressure"]
+        return int(main["pressure"])
 
     # function to find the CURRENT WEATHER within the JSON file
     def getCurrent(self):
@@ -84,17 +84,17 @@ class Weather:
         if self.refresh:
             self.ping()
         chance = self.info["pop"]
-        return str(chance * 100) + "%"
+        return chance
 
     def __str__(self):
         # always refresh data before printing it
         self.ping()
         s = f"{self.city:-^30}\n"
-        s += f"Temperature: {self.getTemp()}degF\n"
+        s += f"Temperature: {self.getTemp()}°F\n"
         s += f"Humidity: {self.getHumidity()}%\n"
         s += f"Pressure: {self.getPressure()}mbar\n"
         s += f"Weather Report: {self.getCurrent()}\n"
-        s += f"Chance of Rain: {self.getRainChance()}\n"
+        s += f"Chance of Rain: {self.getRainChance()*100}%\n"
         return s
 
 ########################################################################

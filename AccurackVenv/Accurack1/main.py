@@ -4,13 +4,13 @@
 # import our written libraries
 from weather_class import *
 from Google_Calendar_API import *
-import requests
+
 # import external libraries
+import requests
 from tkinter import *
 from tkinter import ttk
 from time import sleep
 
-# TODO: make this function a class (preferably)
 class keyboardGUI:
     def __init__(self):
         self.setupKeys()
@@ -190,10 +190,10 @@ class Application(Frame):
         Frame2 = Frame(self.master, bg="red2")
         Frame2.grid(row = 3, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S)
 
-        Label2A = Label(Frame2, text = "Coat Recommendation", font = "times 20 bold", bg = "red2")
+        Label2A = Label(Frame2, text = "Coat Recommendation:", font = "times 20 bold", bg = "red2")
         Label2A.pack()
 
-        Label2B = Label(Frame2, text = "Which coat here", font = "times 20", bg = "red2")
+        Label2B = Label(Frame2, text = self.recommendCoat(), font = "times 20", bg = "red2")
         Label2B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
         Frame3 = Frame(self.master, bg="blue2")
@@ -206,8 +206,32 @@ class Application(Frame):
         Label3B = Label(Frame3, text = "{}".format(reminders), font = "times 20",bg = "blue2")
         Label3B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
+    # rain chance >= 60, RAINCOAT
+    # rain chance >= 30, UMBRELLA
+    # rain chance >= 75, BOTH
+    # temp < 60 and rain chance <30, LIGHT COAT
+    # temp < 35, HEAVY COAT
+    def recommendCoat(self):
+        weatherData.ping()
+        s = "I recommend you take a(n)\n"
+        if (weatherData.getRainChance() >= 0.75) and (weatherData.getTemp() >= 32):
+            s = "I recommend both an\nUMBRELLA and a RAIN COAT"
+        elif (weatherData.getRainChance() >= 0.6) and (weatherData.getTemp() >= 32):
+            s += "RAINCOAT"
+        elif (weatherData.getRainChance() >= 0.3) and (weatherData.getTemp() >= 32):
+            s += "UMBRELLA"
+        elif (weatherData.getTemp() <= 35):
+            s += "HEAVY COAT"
+        elif (weatherData.getTemp() <= 60):
+            s += "LIGHT COAT"
+        else:
+            s = "It looks like you're good\nto go today!\nHave a great day!"
+
+        return s
 
 
+
+###### MAIN CODE #######
 keyboardGUI()
 
 Tk = Tk()
