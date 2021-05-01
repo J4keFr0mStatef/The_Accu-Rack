@@ -118,7 +118,7 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 #VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 #Immensely important that this file is correctly located on the machine. Otherwise the API will fail.
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-CREDENTIALS_FILE = 'Users\Jake\Desktop\credentials.json'
+CREDENTIALS_FILE = 'C:\google calendar api\credentials.json'
 
 #Function will verify and allow access to google calendar
 def get_calendar_service():
@@ -165,7 +165,7 @@ def getReminder():
             time2 = dt.strftime("%I:%M %p")
             
            
-            reminders.append(str(event['summary'])+" - "+str(time2))
+            reminders.append(str(event['summary'])+" @ "+str(time2))
         reminders = "\n".join(reminders)
 
     return reminders
@@ -174,11 +174,18 @@ def getReminder():
 reminders = getReminder()
 
 
+
 ############################### KEYBOARD GUI #################################
 
 import tkinter as tk
 from tkinter import ttk
+import requests
 from time import sleep
+
+
+
+
+    
         
 def keybaordGUI():
     #Showing all data in display 
@@ -200,6 +207,7 @@ def keybaordGUI():
     def action():
         global exp
         exp = ""
+
 
         ###########CHECK FOR CORRECT CITY FOR WEATHER API#############
         # base URL
@@ -289,11 +297,14 @@ def keybaordGUI():
     G = ttk.Button(keyboard,text = 'G' , width = 7, command = lambda : press('G'))
     G.grid(row = 2 , column = 4, ipadx = 7 , ipady = 20)
 
+
     H = ttk.Button(keyboard,text = 'H' , width = 7, command = lambda : press('H'))
     H.grid(row = 2 , column = 5, ipadx = 7 , ipady = 20)
 
+
     J = ttk.Button(keyboard,text = 'J' , width = 7, command = lambda : press('J'))
     J.grid(row = 2 , column = 6, ipadx = 7 , ipady = 20)
+
 
     K = ttk.Button(keyboard,text = 'K' , width = 7, command = lambda : press('K'))
     K.grid(row = 2 , column = 7, ipadx = 7 , ipady = 20)
@@ -301,15 +312,20 @@ def keybaordGUI():
     L = ttk.Button(keyboard,text = 'L' , width = 7, command = lambda : press('L'))
     L.grid(row = 2 , column = 8, ipadx = 7 , ipady = 20)
 
+
+
     #Third line Buttons
     Z = ttk.Button(keyboard,text = 'Z' , width = 7, command = lambda : press('Z'))
     Z.grid(row = 3 , column = 1, ipadx = 7 , ipady = 20)
 
+
     X = ttk.Button(keyboard,text = 'X' , width = 7, command = lambda : press('X'))
     X.grid(row = 3 , column = 2, ipadx = 7 , ipady = 20)
 
+
     C = ttk.Button(keyboard,text = 'C' , width = 7, command = lambda : press('C'))
     C.grid(row = 3 , column = 3, ipadx = 7 , ipady = 20)
+
 
     V = ttk.Button(keyboard,text = 'V' , width = 7, command = lambda : press('V'))
     V.grid(row = 3 , column = 4, ipadx = 7 , ipady = 20)
@@ -317,11 +333,14 @@ def keybaordGUI():
     B = ttk.Button(keyboard, text= 'B' , width = 7 , command = lambda : press('B'))
     B.grid(row = 3 , column = 5, ipadx = 7 ,ipady = 20)
 
+
     N = ttk.Button(keyboard,text = 'N' , width = 7, command = lambda : press('N'))
     N.grid(row = 3 , column = 6, ipadx = 7 , ipady = 20)
 
+
     M = ttk.Button(keyboard,text = 'M' , width = 7, command = lambda : press('M'))
     M.grid(row = 3 , column = 7, ipadx = 7 , ipady = 20)
+
 
     #Fourth Line Buttons
     space = ttk.Button(keyboard,text = 'Space' , width = 7, command = lambda : press(' '))
@@ -330,7 +349,11 @@ def keybaordGUI():
     enter = ttk.Button(keyboard,text = 'Enter' , width = 7, command = action)
     enter.grid(row = 4, column = 9, ipadx = 6 , ipady = 20)
 
+    
+
+
     keyboard.mainloop() 
+
 
 
 #### MAIN CODE FOR KEYBOARD GUI ####
@@ -351,7 +374,6 @@ class Application(Frame):
             self.master.columnconfigure(c, weight=1)
             Button(master, text="Button {0}".format(c)).grid(row=6,column=c,sticky=E+W)
 
-    def setup(self):
         Frame1 = Frame(master, bg="red2")
         Frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S) 
 
@@ -360,6 +382,7 @@ class Application(Frame):
 
         Label1B = Label(Frame1, text = "{}".format(weatherData),font = "times 20", bg = "red2")
         Label1B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
+
 
         Frame2 = Frame(master, bg="red2")
         Frame2.grid(row = 3, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S)
@@ -370,18 +393,17 @@ class Application(Frame):
         Label2B = Label(Frame2, text = "Which coat here", font = "times 20", bg = "red2")
         Label2B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
+
         Frame3 = Frame(master, bg="blue2")
         Frame3.grid(row = 0, column = 2, rowspan = 6, columnspan = 3, sticky = W+E+N+S)
+
 
         Label3A = Label(Frame3, text = "Reminders {}".format(datetime.datetime.now().today().strftime("%A %B %d")), font = "times 20 bold", bg = "blue2")
         Label3A.pack()
 
         Label3B = Label(Frame3, text = "{}".format(reminders), font = "times 20",bg = "blue2")
         Label3B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
-
-    # function for the LED and Switch interface
-    def interface(self):
-        pass
+        
         
 
 Tk = Tk()
@@ -389,4 +411,6 @@ Tk.geometry("800x480")
 Tk.config(cursor = "none")
 app = Application(master=Tk)
 app.mainloop()
+
+
 

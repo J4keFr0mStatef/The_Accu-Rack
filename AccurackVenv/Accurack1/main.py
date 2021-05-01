@@ -11,6 +11,8 @@ from tkinter import *
 from tkinter import ttk
 from time import sleep
 
+FULLSCREEN = False
+
 class keyboardGUI:
     def __init__(self):
         self.setupKeys()
@@ -52,7 +54,7 @@ class keyboardGUI:
     def setupKeys(self):
         self.keyboard = Tk()  # key window name
         self.keyboard.title('Keyboard')  # title Name
-        self.keyboard.attributes("-fullscreen", True)
+        self.keyboard.attributes("-fullscreen", FULLSCREEN)
         self.keyboard.config(cursor = "none")
 
         self.exp = " "   # global variable 
@@ -176,7 +178,9 @@ class Application(Frame):
             self.master.rowconfigure(r, weight=1)    
         for c in range(5):
             self.master.columnconfigure(c, weight=1)
-            Button(self.master, text="Button {0}".format(c)).grid(row=6,column=c,sticky=E+W)
+           
+        Button1 = Button(self.master, text="Change city", command = self.destroy())
+        Button1.grid(row=6,column=0,sticky=E+W)
 
         Frame1 = Frame(self.master, bg="red2")
         Frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S) 
@@ -205,6 +209,10 @@ class Application(Frame):
         reminders = getReminder()
         Label3B = Label(Frame3, text = "{}".format(reminders), font = "times 20",bg = "blue2")
         Label3B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
+    
+    def changeCity(self):
+        self.destroy()
+    
 
     # rain chance >= 60, RAINCOAT
     # rain chance >= 30, UMBRELLA
@@ -233,10 +241,9 @@ class Application(Frame):
 
 ###### MAIN CODE #######
 keyboardGUI()
-
-Tk = Tk()
-Tk.geometry("800x480")
-Tk.config(cursor = "none")
-app = Application(master=Tk)
-Tk.attributes("-fullscreen", True)
+GUI = Tk()
+GUI.geometry("800x480")
+GUI.config(cursor = "none")
+app = Application(master=GUI)
+GUI.attributes("-fullscreen", FULLSCREEN)
 app.mainloop()
