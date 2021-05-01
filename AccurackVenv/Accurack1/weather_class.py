@@ -89,10 +89,8 @@ class Weather:
     def __str__(self):
         # always refresh data before printing it
         self.ping()
-        s = f"{self.city:-^30}\n"
-        s += f"Temperature: {self.getTemp()}°F\n"
+        s = f"Temperature: {self.getTemp()}°F\n"
         s += f"Humidity: {self.getHumidity()}%\n"
-        s += f"Pressure: {self.getPressure()}mbar\n"
         s += f"Weather Report: {self.getCurrent()}\n"
         s += f"Chance of Rain: {self.getRainChance()*100}%\n"
         return s

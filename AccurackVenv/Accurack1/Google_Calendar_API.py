@@ -15,7 +15,7 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 #VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 #Immensely important that this file is correctly located on the machine. Otherwise the API will fail.
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-CREDENTIALS_FILE = 'C:\google calendar api\credentials.json'
+CREDENTIALS_FILE = '/home/pi/Desktop/CSC132_Final-Multi-Threading/AccurackVenv/Accurack1\credentials.json'
 
 #Function will verify and allow access to google calendar
 def get_calendar_service():
@@ -53,15 +53,19 @@ def getReminder():
     events = events_result.get('items', [])
     reminders = []
     if not events:
-        reminders = 'No upcoming events found.'
+        reminders = "No events found."
 
-    for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-       
-        reminders.append(str(event['summary']))
-       
+    else:
+        for event in events:
+            time1 = str(event['start']['dateTime'])
+            dt = datetime.datetime.fromisoformat(time1)
+            time2 = dt.strftime("%I:%M %p")
+            
+           
+            reminders.append(str(event['summary'])+" @ "+str(time2))
+        reminders = "\n".join(reminders)
+
     return reminders
-
 #Main call for the reminder variable. This is the variable that should be used for the GUI. 
 reminders = getReminder()
 print(reminders)
