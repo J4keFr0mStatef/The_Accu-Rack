@@ -31,7 +31,7 @@ class keyboardGUI:
     # Enter Button Function
 
     def action(self):
-        self.exp = ""
+        self.exp = " "
 
         ###########CHECK FOR CORRECT CITY FOR WEATHER API#############
         # base URL
@@ -48,6 +48,10 @@ class keyboardGUI:
             global weatherData
             weatherData = Weather("{}".format(CITY.get())) 
             self.keyboard.destroy()
+            GUI()
+           
+
+
         else:
             CITY.set("COULD NOT FIND CITY")
 
@@ -55,7 +59,8 @@ class keyboardGUI:
         self.keyboard = Tk()  # key window name
         self.keyboard.title('Keyboard')  # title Name
         self.keyboard.attributes("-fullscreen", FULLSCREEN)
-        self.keyboard.config(cursor = "none")
+        
+
 
         self.exp = " "   # global variable 
 
@@ -71,7 +76,7 @@ class keyboardGUI:
         self.Dis_entry = ttk.Entry(self.keyboard,state= 'readonly',textvariable = CITY)
         self.Dis_entry.grid(rowspan = 1, columnspan = 330, ipadx = 330, ipady = 40)
 
-        # First Line Buttons
+        # First Line Buttons    
         q = ttk.Button(self.keyboard,text = 'Q' , width = 7, command = lambda : self.press('Q'))
         q.grid(row = 1 , column = 0, ipadx = 7 , ipady = 20)
 
@@ -166,52 +171,55 @@ class keyboardGUI:
 
 
 ################################## MAIN GUI ########################################
-class Application(Frame):
-    def __init__(self, master=None):
-        Frame.__init__(self, master)
-        self.grid()
-        self.master.title("The Accurack")
+class GUI():
+    def __init__(self):
         self.setUpGUI()
-
+        
     def setUpGUI(self):
+        self.GUI = Tk()  # key window name
+        self.GUI.title('The Accurack')  # title Name
+        self.GUI.geometry("800x480")
+        self.GUI.attributes("-fullscreen", FULLSCREEN)
+
         for r in range(6):
-            self.master.rowconfigure(r, weight=1)    
+            self.GUI.rowconfigure(r, weight=1)    
         for c in range(5):
-            self.master.columnconfigure(c, weight=1)
-           
-        Button1 = Button(self.master, text="Change city", command = self.destroy())
+            self.GUI.columnconfigure(c, weight=1)
+        
+        Button1 = Button(self.GUI, text="Change city", command = lambda : self.changeCity())
         Button1.grid(row=6,column=0,sticky=E+W)
 
-        Frame1 = Frame(self.master, bg="red2")
+        Frame1 = Frame(self.GUI, bg="red2")
         Frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S) 
 
         Label1A = Label(Frame1, text = "{}".format(CITY.get()), font = "times 20 bold", bg = "red2")
         Label1A.pack()
 
-        Label1B = Label(Frame1, text = "{}".format(weatherData),font = "times 20", bg = "red2")
+        Label1B = Label(Frame1, text = "{}".format(weatherData),font = "times 19", bg = "red2")
         Label1B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
-        Frame2 = Frame(self.master, bg="red2")
+        Frame2 = Frame(self.GUI, bg="red2")
         Frame2.grid(row = 3, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S)
 
         Label2A = Label(Frame2, text = "Coat Recommendation:", font = "times 20 bold", bg = "red2")
         Label2A.pack()
 
-        Label2B = Label(Frame2, text = self.recommendCoat(), font = "times 20", bg = "red2")
+        Label2B = Label(Frame2, text = self.recommendCoat(), font = "times 19", bg = "red2")
         Label2B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
-        Frame3 = Frame(self.master, bg="blue2")
+        Frame3 = Frame(self.GUI, bg="blue2")
         Frame3.grid(row = 0, column = 2, rowspan = 6, columnspan = 3, sticky = W+E+N+S)
 
         Label3A = Label(Frame3, text = "Reminders {}".format(datetime.datetime.now().today().strftime("%A %B %d")), font = "times 20 bold", bg = "blue2")
         Label3A.pack()
 
         reminders = getReminder()
-        Label3B = Label(Frame3, text = "{}".format(reminders), font = "times 20",bg = "blue2")
+        Label3B = Label(Frame3, text = "{}".format(reminders), font = "times 19",bg = "blue2")
         Label3B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
-    
-    def changeCity(self):
-        self.destroy()
+
+        
+        self.GUI.mainloop()
+
     
 
     # rain chance >= 60, RAINCOAT
@@ -237,13 +245,11 @@ class Application(Frame):
 
         return s
 
+    def changeCity(self):
+        self.GUI.destroy()
+        keyboardGUI()
 
 
 ###### MAIN CODE #######
 keyboardGUI()
-GUI = Tk()
-GUI.geometry("800x480")
-GUI.config(cursor = "none")
-app = Application(master=GUI)
-GUI.attributes("-fullscreen", FULLSCREEN)
-app.mainloop()
+
