@@ -267,4 +267,4 @@ class GUI():
 
 
 ###### MAIN CODE #######
-skeyboardGUI()
+keyboardGUI()
