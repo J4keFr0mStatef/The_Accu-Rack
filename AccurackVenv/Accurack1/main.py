@@ -9,7 +9,9 @@ from Google_Calendar_API import *
 import requests
 from tkinter import *
 from tkinter import ttk
-from time import sleep
+
+
+weatherData = None
 
 FULLSCREEN = True
 
@@ -59,9 +61,6 @@ class keyboardGUI:
         self.keyboard.title('Keyboard')  # title Name
         self.keyboard.attributes("-fullscreen", FULLSCREEN)
         self.keyboard.config(cursor = "none")
-        
-
-
         self.exp = " "   # global variable 
 
         # Size window 
@@ -191,13 +190,13 @@ class GUI():
         self.Button1 = Button(self.GUI, text="Change city", command = lambda : self.changeCity())
         self.Button1.grid(row = 6, column = 0, columnspan = 2, sticky = N + S +E + W)
 
-        self.Button2 = Button(self.GUI, text = "°F/°C")
+        self.Button2 = Button(self.GUI, text = "°F/°C", command = lambda: self.changeTemp())
         self.Button2.grid(row = 6, column = 2, columnspan = 2, sticky = N + S + E + W)
 
         self.Button3 = Button(self.GUI, text = "Refresh", command = lambda : self.refresh())
         self.Button3.grid(row = 6, column = 4, columnspan = 2, sticky = N + S + E + W)
 
-        self.Frame1 = Frame(self.GUI, bg="red2")
+        self.Frame1 = Frame(self.GUI, bg="red2", highlightthickness = 2, highlightbackground = "black")
         self.Frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S) 
 
         self.Label1A = Label(self.Frame1, text = "{}".format(CITY.get()), font = "times 20 bold", bg = "red2")
@@ -206,7 +205,7 @@ class GUI():
         self.Label1B = Label(self.Frame1, text = "{}".format(weatherData),font = "times 19", bg = "red2")
         self.Label1B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
-        self.Frame2 = Frame(self.GUI, bg="red2")
+        self.Frame2 = Frame(self.GUI, bg="red2", highlightthickness = 2, highlightbackground = "black")
         self.Frame2.grid(row = 3, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S)
 
         self.Label2A = Label(self.Frame2, text = "Coat Recommendation:", font = "times 20 bold", bg = "red2")
@@ -215,7 +214,7 @@ class GUI():
         self.Label2B = Label(self.Frame2, text = self.recommendCoat(), font = "times 19", bg = "red2")
         self.Label2B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
-        self.Frame3 = Frame(self.GUI, bg="blue2")
+        self.Frame3 = Frame(self.GUI, bg="blue2", highlightthickness = 2, highlightbackground = "black")
         self.Frame3.grid(row = 0, column = 2, rowspan = 6, columnspan = 3, sticky = W+E+N+S)
 
         self.Label3A = Label(self.Frame3, text = "Reminders {}".format(datetime.datetime.now().today().strftime("%A %B %d")), font = "times 20 bold", bg = "blue2")
@@ -262,8 +261,6 @@ class GUI():
     # WIP still experimenting with this
     # temporary implementation of this addition
     def refresh(self):
-        #just to test, typing in TOK and then when i press refresh it resets to ruston
-        CITY.set("Ruston")
         weatherData = Weather("{}".format(CITY.get()))
 
         self.Label1A.config(text = "{}".format(CITY.get()))
@@ -275,6 +272,16 @@ class GUI():
         
         reminders = getReminder()
         self.Label3B.config(text = "{}".format(reminders))
+
+    def changeTemp(self):
+        global weatherData
+        if weatherData.unit == "imperial":
+            weatherData = Weather("{}".format(CITY.get()), "metric")
+            self.Label1B.config(text = "{}".format(weatherData))
+        else:
+            weatherData = Weather("{}".format(CITY.get()), "imperial")
+            self.Label1B.config(text = "{}".format(weatherData))
+    
 
 
 

@@ -16,6 +16,7 @@ class Weather:
         self.unit = unit
         self.refresh = True
 
+
     # accessor and mutator for city
     @property
     def city(self):
@@ -35,6 +36,14 @@ class Weather:
     @info.setter
     def info(self, value):
         self._info = value
+
+    @property
+    def unit(self):
+        return self._unit
+    
+    @unit.setter
+    def unit(self, value):
+        self._unit = value
 
     # function to ping the server and set all the required values
     # used in all the get() functions to ensure most recent data
@@ -90,7 +99,10 @@ class Weather:
     def __str__(self):
         # always refresh data before printing it
         self.ping()
-        s = f"Temperature: {self.getTemp()}°F\n"
+        if (self.unit == 'imperial'):
+            s = f"Temperature: {self.getTemp()}°F\n"
+        else:
+            s = f"Temperature: {self.getTemp()}°C\n"
         s += f"Humidity: {self.getHumidity()}%\n"
         s += f"Weather Report: {self.getCurrent()}\n"
         s += f"Chance of Rain: {self.getRainChance()*100}%\n"
