@@ -188,46 +188,46 @@ class GUI():
         for c in range(5):
             self.GUI.columnconfigure(c, weight=1)
         
-        Button1 = Button(self.GUI, text="Change city", command = lambda : self.changeCity())
-        Button1.grid(row = 6, column = 0, columnspan = 2, sticky = N + S +E + W)
+        self.Button1 = Button(self.GUI, text="Change city", command = lambda : self.changeCity())
+        self.Button1.grid(row = 6, column = 0, columnspan = 2, sticky = N + S +E + W)
 
-        Button2 = Button(self.GUI, text = "°F/°C")
-        Button2.grid(row = 6, column = 2, columnspan = 2, sticky = N + S + E + W)
+        self.Button2 = Button(self.GUI, text = "°F/°C")
+        self.Button2.grid(row = 6, column = 2, columnspan = 2, sticky = N + S + E + W)
 
-        Button3 = Button(self.GUI, text = "Refresh", command = lambda : self.refresh())
-        Button3.grid(row = 6, column = 4, columnspan = 2, sticky = N + S + E + W)
+        self.Button3 = Button(self.GUI, text = "Refresh", command = lambda : self.refresh())
+        self.Button3.grid(row = 6, column = 4, columnspan = 2, sticky = N + S + E + W)
 
-        Frame1 = Frame(self.GUI, bg="red2")
-        Frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S) 
+        self.Frame1 = Frame(self.GUI, bg="red2")
+        self.Frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S) 
 
-        Label1A = Label(Frame1, text = "{}".format(CITY.get()), font = "times 20 bold", bg = "red2")
-        Label1A.pack()
+        self.Label1A = Label(self.Frame1, text = "{}".format(CITY.get()), font = "times 20 bold", bg = "red2")
+        self.Label1A.pack()
 
-        Label1B = Label(Frame1, text = "{}".format(weatherData),font = "times 19", bg = "red2")
-        Label1B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
+        self.Label1B = Label(self.Frame1, text = "{}".format(weatherData),font = "times 19", bg = "red2")
+        self.Label1B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
-        Frame2 = Frame(self.GUI, bg="red2")
-        Frame2.grid(row = 3, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S)
+        self.Frame2 = Frame(self.GUI, bg="red2")
+        self.Frame2.grid(row = 3, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S)
 
-        Label2A = Label(Frame2, text = "Coat Recommendation:", font = "times 20 bold", bg = "red2")
-        Label2A.pack()
+        self.Label2A = Label(self.Frame2, text = "Coat Recommendation:", font = "times 20 bold", bg = "red2")
+        self.Label2A.pack()
 
-        Label2B = Label(Frame2, text = self.recommendCoat(), font = "times 19", bg = "red2")
-        Label2B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
+        self.Label2B = Label(self.Frame2, text = self.recommendCoat(), font = "times 19", bg = "red2")
+        self.Label2B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
-        Frame3 = Frame(self.GUI, bg="blue2")
-        Frame3.grid(row = 0, column = 2, rowspan = 6, columnspan = 3, sticky = W+E+N+S)
+        self.Frame3 = Frame(self.GUI, bg="blue2")
+        self.Frame3.grid(row = 0, column = 2, rowspan = 6, columnspan = 3, sticky = W+E+N+S)
 
-        Label3A = Label(Frame3, text = "Reminders {}".format(datetime.datetime.now().today().strftime("%A %B %d")), font = "times 20 bold", bg = "blue2")
-        Label3A.pack()
+        self.Label3A = Label(self.Frame3, text = "Reminders {}".format(datetime.datetime.now().today().strftime("%A %B %d")), font = "times 20 bold", bg = "blue2")
+        self.Label3A.pack()
 
         reminders = getReminder()
-        Label3B = Label(Frame3, text = "{}".format(reminders), font = "times 19",bg = "blue2")
-        Label3B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
+        self.Label3B = Label(self.Frame3, text = "{}".format(reminders), font = "times 19",bg = "blue2")
+        self.Label3B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
         self.GUI.config(cursor = "none")
         self.GUI.mainloop()
-
+        
     
 
     # rain chance >= 60, RAINCOAT
@@ -262,8 +262,23 @@ class GUI():
     # WIP still experimenting with this
     # temporary implementation of this addition
     def refresh(self):
-        self.GUI.destroy()
-        self.setUpGUI()
+        #just to test, typing in TOK and then when i press refresh it resets to ruston
+        CITY.set("Ruston")
+        weatherData = Weather("{}".format(CITY.get()))
+
+        self.Label1A.config(text = "{}".format(CITY.get()))
+        self.Label1B.config(text = "{}".format(weatherData))
+
+        self.Label2B.config(text = self.recommendCoat())
+
+        self.Label3A.config(text = "Reminders {}".format(datetime.datetime.now().today().strftime("%A %B %d")))
+        
+        reminders = getReminder()
+        self.Label3B.config(text = "{}".format(reminders))
+
+
+
+
 
 
 ###### MAIN CODE #######

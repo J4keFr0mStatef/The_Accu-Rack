@@ -10,9 +10,10 @@ class Weather:
     # Base request URL for API
     FORECASTER_URL = "https://api.openweathermap.org/data/2.5/forecast?"
 
-    def __init__(self, city):
+    def __init__(self, city, unit='imperial'):
         self.city = city
         self.info = {}
+        self.unit = unit
         self.refresh = True
 
     # accessor and mutator for city
@@ -39,7 +40,7 @@ class Weather:
     # used in all the get() functions to ensure most recent data
     def ping(self):
         # format URL for the server request
-        URL = self.FORECASTER_URL + "q=" + self.city + "&units=imperial" + "&appid=" + self.API_KEY
+        URL = self.FORECASTER_URL + "q=" + self.city + f'&units={self.unit}' + "&appid=" + self.API_KEY
         response = requests.get(URL)
         # check to see if the server responded
         if response.status_code == 200:
