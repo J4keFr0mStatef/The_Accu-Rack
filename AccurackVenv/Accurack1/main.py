@@ -11,7 +11,7 @@ from tkinter import *
 from tkinter import ttk
 from time import sleep
 
-FULLSCREEN = False
+FULLSCREEN = True
 
 class keyboardGUI:
     def __init__(self):
@@ -47,11 +47,10 @@ class keyboardGUI:
         if response.status_code == 200:
             global weatherData
             weatherData = Weather("{}".format(CITY.get())) 
-            self.keyboard.destroy()
             GUI()
-           
-
-
+            self.keyboard.destroy()
+            keyboardGUI()
+        
         else:
             CITY.set("COULD NOT FIND CITY")
 
@@ -172,6 +171,7 @@ class keyboardGUI:
 
 ################################## MAIN GUI ########################################
 class GUI():
+
     def __init__(self):
         self.setUpGUI()
         
@@ -247,7 +247,7 @@ class GUI():
 
     def changeCity(self):
         self.GUI.destroy()
-        keyboardGUI()
+        
 
 
 ###### MAIN CODE #######
