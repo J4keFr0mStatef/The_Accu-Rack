@@ -187,13 +187,13 @@ class GUI():
         for c in range(5):
             self.GUI.columnconfigure(c, weight=1)
         
-        self.Button1 = Button(self.GUI, text="Change city", command = lambda : self.changeCity())
+        self.Button1 = Button(self.GUI, text="Change city", command = lambda : self.changeCity(), font = "times 19 bold", highlightthickness = 2, highlightbackground = "black")
         self.Button1.grid(row = 6, column = 0, columnspan = 2, sticky = N + S +E + W)
 
-        self.Button2 = Button(self.GUI, text = "°F/°C", command = lambda: self.changeTemp())
+        self.Button2 = Button(self.GUI, text = "°F/°C", command = lambda: self.changeTemp(), font = "times 19 bold", highlightthickness = 2, highlightbackground = "black")
         self.Button2.grid(row = 6, column = 2, columnspan = 2, sticky = N + S + E + W)
 
-        self.Button3 = Button(self.GUI, text = "Refresh", command = lambda : self.refresh())
+        self.Button3 = Button(self.GUI, text = "Refresh", command = lambda : self.refresh(), font = "times 19 bold", highlightthickness = 2, highlightbackground = "black")
         self.Button3.grid(row = 6, column = 4, columnspan = 2, sticky = N + S + E + W)
 
         self.Frame1 = Frame(self.GUI, bg="red2", highlightthickness = 2, highlightbackground = "black")
