@@ -11,7 +11,7 @@ from tkinter import *
 from tkinter import ttk
 from time import sleep
 
-FULLSCREEN = False
+FULLSCREEN = True
 
 class keyboardGUI:
     def __init__(self):
@@ -59,6 +59,7 @@ class keyboardGUI:
         self.keyboard = Tk()  # key window name
         self.keyboard.title('Keyboard')  # title Name
         self.keyboard.attributes("-fullscreen", FULLSCREEN)
+        self.keyboard.config(cursor = "none")
         
 
 
@@ -167,7 +168,8 @@ class keyboardGUI:
         enter = ttk.Button(self.keyboard,text = 'Enter' , width = 7, command = self.action)
         enter.grid(row = 4, column = 9, ipadx = 6 , ipady = 20)
 
-        self.keyboard.mainloop() 
+        self.keyboard.mainloop()
+        
 
 
 ################################## MAIN GUI ########################################
@@ -187,7 +189,13 @@ class GUI():
             self.GUI.columnconfigure(c, weight=1)
         
         Button1 = Button(self.GUI, text="Change city", command = lambda : self.changeCity())
-        Button1.grid(row=6,column=0,sticky=E+W)
+        Button1.grid(row = 6, column = 0, columnspan = 2, sticky = N + S +E + W)
+
+        Button2 = Button(self.GUI, text = "°F/°C")
+        Button2.grid(row = 6, column = 2, columnspan = 2, sticky = N + S + E + W)
+
+        Button3 = Button(self.GUI, text = "Refresh", command = lambda : self.refresh())
+        Button3.grid(row = 6, column = 4, columnspan = 2, sticky = N + S + E + W)
 
         Frame1 = Frame(self.GUI, bg="red2")
         Frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S) 
@@ -217,7 +225,7 @@ class GUI():
         Label3B = Label(Frame3, text = "{}".format(reminders), font = "times 19",bg = "blue2")
         Label3B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
-        
+        self.GUI.config(cursor = "none")
         self.GUI.mainloop()
 
     
@@ -244,12 +252,19 @@ class GUI():
             s = "It looks like you're good\nto go today!\nHave a great day!"
 
         return s
-
+    
+    # change city function
     def changeCity(self):
         self.GUI.destroy()
         keyboardGUI()
 
+    # refresh function
+    # WIP still experimenting with this
+    # temporary implementation of this addition
+    def refresh(self):
+        self.GUI.destroy()
+        self.setUpGUI()
+
 
 ###### MAIN CODE #######
-keyboardGUI()
-
+skeyboardGUI()
