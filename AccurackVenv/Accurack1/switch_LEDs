@@ -1,20 +1,24 @@
 import RPi.GPIO as GPIO
 from time import delay
 
-coats = {"umbrella": 4, "raincoat": 25, "light coat": 24, "heavy coat": 5}
-leds = {"umbrella": 17, "raincoat": 16, "light coat": 13, "heavy coat": 12}
+def setupGPIO():
+    coats = {"umbrella": 4, "raincoat": 25, "light coat": 24, "heavy coat": 5}
+    leds = {"umbrella": 17, "raincoat": 16, "light coat": 13, "heavy coat": 12}
 
-GPIO.setmode(GPIO.BCM)
-# setup the GPIO for the limit switches
-GPIO.setup(coats["umbrella"], GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
-GPIO.setup(coats["raincoat"], GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
-GPIO.setup(coats["light coat"], GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
-GPIO.setup(coats["heavy coat"], GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
-# setup the GPIO for the LEDs
-GPIO.setup(leds["umbrella"], GPIO.OUT)
-GPIO.setup(leds["raincoat"], GPIO.OUT)
-GPIO.setup(leds["light coat"], GPIO.OUT)
-GPIO.setup(leds["heavy coat"], GPIO.OUT)
+    GPIO.setmode(GPIO.BCM)
+    # setup the GPIO for the limit switches
+    GPIO.setup(coats["umbrella"], GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+    GPIO.setup(coats["raincoat"], GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+    GPIO.setup(coats["light coat"], GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+    GPIO.setup(coats["heavy coat"], GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+    # setup the GPIO for the LEDs
+    GPIO.setup(leds["umbrella"], GPIO.OUT)
+    GPIO.setup(leds["raincoat"], GPIO.OUT)
+    GPIO.setup(leds["light coat"], GPIO.OUT)
+    GPIO.setup(leds["heavy coat"], GPIO.OUT)
+
+    return coats, leds
+>>>>>>> Stashed changes
 
 def blink(led):
     GPIO.output(led, GPIO.HIGH)
@@ -23,9 +27,22 @@ def blink(led):
     delay(0.3)
 
 def recommend(coat):
-    while (GPIO.input(coats[f"{coat}"]) == GPIO.HIGH):
-        blink(coats[f"{coat}"])
+    weatherData.ping()
+    s = "I recommend you take a(n)\n"
+    if (weatherData.getRainChance() >= 0.75) and (weatherData.getTemp() >= 32):
+        s = "I recommend both an\nUMBRELLA and a RAIN COAT"
+    elif (weatherData.getRainChance() >= 0.6) and (weatherData.getTemp() >= 32):
+        s += "RAINCOAT"
+    elif (weatherData.getRainChance() >= 0.3) and (weatherData.getTemp() >= 32):
+        s += "UMBRELLA"
+    elif (weatherData.getTemp() <= 35):
+        s += "HEAVY COAT"
+    elif (weatherData.getTemp() <= 60):
+        s += "LIGHT COAT"
+    else:
+        s = "It looks like you're good\nto go today!\nHave a great day!"
 
+# forever loop might be an issue
 while True:
     if (GPIO.input(coats["umbrella"] == GPIO.HIGH):
         # do this if umbrella is on switch 1
