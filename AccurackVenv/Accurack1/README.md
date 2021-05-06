@@ -6,20 +6,20 @@ Freshman design project for CSC132 at Louisiana Tech University.  This project i
 
 ### Authors ###
 John Doherty
-    GitHub: https://github.com/johnpdoherty
+GitHub: https://github.com/johnpdoherty
 
 Travis Knippers
-    GitHub: https://github.com/J4keFr0mStatef
+GitHub: https://github.com/J4keFr0mStatef
 
 Gregory Whitehurst
-    GitHub: https://github.com/GregWhite2001
+GitHub: https://github.com/GregWhite2001
 
 ### GitHub Repository ###
 https://github.com/J4keFr0mStatef/The_Accu-Rack
 
 ### Instructions ###
 1. place weather wear on the appropriate hook
-    (1 = umbrella)(2 = raincoat)(3 = light coat)(4 = heavy coat) 
+(1 = umbrella)(2 = raincoat)(3 = light coat)(4 = heavy coat) 
 2. Type in a city
 3. The LEDs on the Accu-Rack will illuminate
 4. Choose the weather apparel under the blinking LED
