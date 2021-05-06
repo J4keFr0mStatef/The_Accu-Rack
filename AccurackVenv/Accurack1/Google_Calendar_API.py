@@ -12,9 +12,9 @@ from google.auth.transport.requests import Request
 #Authorization for different portions of the google calendar API.
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
-#VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
-#Immensely important that this file is correctly located on the machine. Otherwise the API will fail.
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#
+#Immensely important that this file is correctly located on the machine. Otherwise the API will fail.#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^#
 CREDENTIALS_FILE = 'C:\google calendar api\credentials.json'
 
 #Function will verify and allow access to google calendar
@@ -52,15 +52,24 @@ def getReminder():
         orderBy='startTime').execute()
     events = events_result.get('items', [])
     reminders = []
-    if not events:
-        reminders = "No events found."
-
-    else:
-        for event in events:
-            time1 = str(event['start']['dateTime'])
-            dt = datetime.datetime.fromisoformat(time1)
-            time2 = dt.strftime("%I:%M %p")
+    #check if there are events listed
+    
+    for event in events:
+        #Pull the start time from the API for the event
+        time1 = str(event['start']['dateTime'])
+        #convert into a datetime from ISO format so we can use it
+        dt = datetime.datetime.fromisoformat(time1)
+        #convert date time into HOUR:MINUTE AM/PM format
+        time2 = dt.strftime("%I:%M %p")
+        #pull current time
+        now = datetime.datetime.now()
+        if dt.strftime("%m%d%Y") == now.strftime("%m%d%Y"): #check if the event falls on the current date
+            #append event to todays reminders
             reminders.append(str(event['summary'])+" @ "+str(time2))
+    #list all reminders seperated by a line in string format
+    if reminders == []:
+        reminders = "No events found."
+    else:
         reminders = "\n".join(reminders)
 
     return reminders
