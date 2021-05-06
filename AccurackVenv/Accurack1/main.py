@@ -125,6 +125,7 @@ class keyboardGUI:
             global weatherData 
             weatherData = Weather("{}".format(CITY.get())) #Pull weather data from the API
             GUI() #run GUI
+            self.keyboard.destroy()
             keyboardGUI()
         
         else:
