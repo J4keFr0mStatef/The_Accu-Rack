@@ -3,7 +3,7 @@ from weather_class import *
 from Google_Calendar_API import *
 
 # import external libraries
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 import requests
 from tkinter import *
 from tkinter import ttk
@@ -13,68 +13,68 @@ from time import sleep as delay
 weatherData = None
 FULLSCREEN = True
 
-class Coathook:
-    coats = {"umbrella": 4, "raincoat": 25, "light coat": 24, "heavy coat": 5}
-    leds = {"umbrella": 17, "raincoat": 16, "light coat": 13, "heavy coat": 12}
+# class Coathook:
+#     coats = {"umbrella": 4, "raincoat": 25, "light coat": 24, "heavy coat": 5}
+#     leds = {"umbrella": 17, "raincoat": 16, "light coat": 13, "heavy coat": 12}
 
-    def __init__(self):
-        self.setupGPIO()
-        self.letThereBeLight()
+#     def __init__(self):
+#         self.setupGPIO()
+#         self.letThereBeLight()
     
-    def setupGPIO(self):
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setwarnings(False)
+#     def setupGPIO(self):
+#         GPIO.setmode(GPIO.BCM)
+#         GPIO.setwarnings(False)
         
-        # setup the GPIO for the limit switches
-        for coat in self.coats:
-            GPIO.setup(self.coats[coat], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        # setup the GPIO for the LEDs
-        for led in self.leds:
-            GPIO.setup(self.leds[led], GPIO.OUT)
+#         # setup the GPIO for the limit switches
+#         for coat in self.coats:
+#             GPIO.setup(self.coats[coat], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+#         # setup the GPIO for the LEDs
+#         for led in self.leds:
+#             GPIO.setup(self.leds[led], GPIO.OUT)
 
-        for coat in self.coats:
-            GPIO.add_event_detect(self.coats[coat], GPIO.BOTH, callback=self.letThereBeLight)
+#         for coat in self.coats:
+#             GPIO.add_event_detect(self.coats[coat], GPIO.BOTH, callback=self.letThereBeLight)
 
-    def blink(self, led):
-        GPIO.output(led, GPIO.LOW)
-        delay(0.3)
-        GPIO.output(led, GPIO.HIGH)
-        delay(0.3)
+#     def blink(self, led):
+#         GPIO.output(led, GPIO.LOW)
+#         delay(0.3)
+#         GPIO.output(led, GPIO.HIGH)
+#         delay(0.3)
 
-    def recommend(self):
-        recommendation = None
-        if (True):
-            if (weatherData.getRainChance() >= 0.75) and (weatherData.getTemp() >= 32):
-                # RAINCOAT & UMBRELLA
-                recommendation = self.leds["raincoat"]
-                recommendation = self.leds["umbrella"]
-            elif (weatherData.getRainChance() >= 0.6) and (weatherData.getTemp() >= 32):
-                # "RAINCOAT"
-                recommendation = self.leds["raincoat"]
-            elif (weatherData.getRainChance() >= 0.3) and (weatherData.getTemp() >= 32):
-                # "UMBRELLA"
-                recommendation = self.leds["umbrella"]
-            elif (weatherData.getTemp() <= 35):
-                # "HEAVY COAT"
-                recommendation = self.leds["heavy coat"]
-            elif (weatherData.getTemp() <= 60):
-                # "LIGHT COAT"
-                recommendation = self.leds["light coat"]
-            return recommendation
+#     def recommend(self):
+#         recommendation = None
+#         if (True):
+#             if (weatherData.getRainChance() >= 0.75) and (weatherData.getTemp() >= 32):
+#                 # RAINCOAT & UMBRELLA
+#                 recommendation = self.leds["raincoat"]
+#                 recommendation = self.leds["umbrella"]
+#             elif (weatherData.getRainChance() >= 0.6) and (weatherData.getTemp() >= 32):
+#                 # "RAINCOAT"
+#                 recommendation = self.leds["raincoat"]
+#             elif (weatherData.getRainChance() >= 0.3) and (weatherData.getTemp() >= 32):
+#                 # "UMBRELLA"
+#                 recommendation = self.leds["umbrella"]
+#             elif (weatherData.getTemp() <= 35):
+#                 # "HEAVY COAT"
+#                 recommendation = self.leds["heavy coat"]
+#             elif (weatherData.getTemp() <= 60):
+#                 # "LIGHT COAT"
+#                 recommendation = self.leds["light coat"]
+#             return recommendation
 
-    def letThereBeLight(self, _=None):
-        # check to see if coats are on the rack
-        rec = self.recommend()
-        for coat in self.coats:
-            #if the coat is not there, turn the light off
-            if (GPIO.input(self.coats[coat]) == 1):
-                GPIO.output(self.leds[coat], GPIO.LOW)
-            else:
-                if rec == self.leds[coat]:
-                    while (GPIO.input(self.coats[coat]) == 0):
-                        self.blink(self.leds[coat])
-                else:
-                    GPIO.output(self.leds[coat], GPIO.HIGH)
+#     def letThereBeLight(self, _=None):
+#         # check to see if coats are on the rack
+#         rec = self.recommend()
+#         for coat in self.coats:
+#             #if the coat is not there, turn the light off
+#             if (GPIO.input(self.coats[coat]) == 1):
+#                 GPIO.output(self.leds[coat], GPIO.LOW)
+#             else:
+#                 if rec == self.leds[coat]:
+#                     while (GPIO.input(self.coats[coat]) == 0):
+#                         self.blink(self.leds[coat])
+#                 else:
+#                     GPIO.output(self.leds[coat], GPIO.HIGH)
 
 
 class keyboardGUI:
@@ -234,8 +234,8 @@ class keyboardGUI:
 class GUI():
 
     def __init__(self):
-        GPIO.cleanup()
-        coathanger = Coathook()
+        # GPIO.cleanup()
+        # coathanger = Coathook()
         self.setUpGUI()
         
     def setUpGUI(self):
@@ -347,3 +347,5 @@ class GUI():
 def main():
     keyboardGUI()
 
+if __name__ == "__main__":
+    main()
