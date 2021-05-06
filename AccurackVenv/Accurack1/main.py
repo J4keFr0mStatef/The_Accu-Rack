@@ -10,7 +10,6 @@ import requests
 from tkinter import *
 from tkinter import ttk
 
-
 weatherData = None
 
 FULLSCREEN = True
