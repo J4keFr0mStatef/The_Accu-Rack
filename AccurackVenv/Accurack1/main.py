@@ -1,18 +1,81 @@
-# GPIO event listener module
-# https://sourceforge.net/p/raspberry-gpio-python/wiki/Inputs/
-
 # import our written libraries
 from weather_class import *
 from Google_Calendar_API import *
 
 # import external libraries
+import RPi.GPIO as GPIO
 import requests
 from tkinter import *
 from tkinter import ttk
+from time import sleep as delay
+
 
 weatherData = None
-
 FULLSCREEN = True
+
+class Coathook:
+    coats = {"umbrella": 4, "raincoat": 25, "light coat": 24, "heavy coat": 5}
+    leds = {"umbrella": 17, "raincoat": 16, "light coat": 13, "heavy coat": 12}
+
+    def __init__(self):
+        self.setupGPIO()
+        self.letThereBeLight()
+    
+    def setupGPIO(self):
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        
+        # setup the GPIO for the limit switches
+        for coat in self.coats:
+            GPIO.setup(self.coats[coat], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        # setup the GPIO for the LEDs
+        for led in self.leds:
+            GPIO.setup(self.leds[led], GPIO.OUT)
+
+        for coat in self.coats:
+            GPIO.add_event_detect(self.coats[coat], GPIO.BOTH, callback=self.letThereBeLight)
+
+    def blink(self, led):
+        GPIO.output(led, GPIO.LOW)
+        delay(0.3)
+        GPIO.output(led, GPIO.HIGH)
+        delay(0.3)
+
+    def recommend(self):
+        recommendation = None
+        if (True):
+            if (weatherData.getRainChance() >= 0.75) and (weatherData.getTemp() >= 32):
+                # RAINCOAT & UMBRELLA
+                recommendation = self.leds["raincoat"]
+                recommendation = self.leds["umbrella"]
+            elif (weatherData.getRainChance() >= 0.6) and (weatherData.getTemp() >= 32):
+                # "RAINCOAT"
+                recommendation = self.leds["raincoat"]
+            elif (weatherData.getRainChance() >= 0.3) and (weatherData.getTemp() >= 32):
+                # "UMBRELLA"
+                recommendation = self.leds["umbrella"]
+            elif (weatherData.getTemp() <= 35):
+                # "HEAVY COAT"
+                recommendation = self.leds["heavy coat"]
+            elif (weatherData.getTemp() <= 60):
+                # "LIGHT COAT"
+                recommendation = self.leds["light coat"]
+            return recommendation
+
+    def letThereBeLight(self, _=None):
+        # check to see if coats are on the rack
+        rec = self.recommend()
+        for coat in self.coats:
+            #if the coat is not there, turn the light off
+            if (GPIO.input(self.coats[coat]) == 1):
+                GPIO.output(self.leds[coat], GPIO.LOW)
+            else:
+                if rec == self.leds[coat]:
+                    while (GPIO.input(self.coats[coat]) == 0):
+                        self.blink(self.leds[coat])
+                else:
+                    GPIO.output(self.leds[coat], GPIO.HIGH)
+
 
 class keyboardGUI:
     def __init__(self):
@@ -24,13 +87,11 @@ class keyboardGUI:
         CITY.set(self.exp)
 
     #Clear button function
-
     def clear(self):
         self.exp = " "
         CITY.set(self.exp)
 
     # Enter Button Function
-
     def action(self):
         self.exp = " "
 
@@ -173,6 +234,8 @@ class keyboardGUI:
 class GUI():
 
     def __init__(self):
+        GPIO.cleanup()
+        coathanger = Coathook()
         self.setUpGUI()
         
     def setUpGUI(self):
@@ -195,39 +258,37 @@ class GUI():
         self.Button3 = Button(self.GUI, text = "Refresh", command = lambda : self.refresh(), font = "times 19 bold", highlightthickness = 2, highlightbackground = "black")
         self.Button3.grid(row = 6, column = 4, columnspan = 2, sticky = N + S + E + W)
 
-        self.Frame1 = Frame(self.GUI, bg="red2", highlightthickness = 2, highlightbackground = "black")
+        self.Frame1 = Frame(self.GUI, bg="firebrick2", highlightthickness = 2, highlightbackground = "black")
         self.Frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S) 
 
-        self.Label1A = Label(self.Frame1, text = "{}".format(CITY.get()), font = "times 20 bold", bg = "red2")
+        self.Label1A = Label(self.Frame1, text = "{}".format(CITY.get()), font = "times 20 bold", bg = "firebrick2")
         self.Label1A.pack()
 
-        self.Label1B = Label(self.Frame1, text = "{}".format(weatherData),font = "times 19", bg = "red2")
+        self.Label1B = Label(self.Frame1, text = "{}".format(weatherData),font = "times 18", bg = "firebrick2")
         self.Label1B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
-        self.Frame2 = Frame(self.GUI, bg="red2", highlightthickness = 2, highlightbackground = "black")
+        self.Frame2 = Frame(self.GUI, bg="firebrick2", highlightthickness = 2, highlightbackground = "black")
         self.Frame2.grid(row = 3, column = 0, rowspan = 3, columnspan = 2, sticky = W+E+N+S)
 
-        self.Label2A = Label(self.Frame2, text = "Coat Recommendation:", font = "times 20 bold", bg = "red2")
+        self.Label2A = Label(self.Frame2, text = "Coat Recommendation:", font = "times 20 bold", bg = "firebrick2")
         self.Label2A.pack()
 
-        self.Label2B = Label(self.Frame2, text = self.recommendCoat(), font = "times 19", bg = "red2")
+        self.Label2B = Label(self.Frame2, text = self.recommendCoat(), font = "times 19", bg = "firebrick2")
         self.Label2B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
-        self.Frame3 = Frame(self.GUI, bg="blue2", highlightthickness = 2, highlightbackground = "black")
+        self.Frame3 = Frame(self.GUI, bg="royal blue", highlightthickness = 2, highlightbackground = "black")
         self.Frame3.grid(row = 0, column = 2, rowspan = 6, columnspan = 3, sticky = W+E+N+S)
 
-        self.Label3A = Label(self.Frame3, text = "Reminders {}".format(datetime.datetime.now().today().strftime("%A %B %d")), font = "times 20 bold", bg = "blue2")
+        self.Label3A = Label(self.Frame3, text = "Reminders {}".format(datetime.datetime.now().today().strftime("%A %B %d")), font = "times 20 bold", bg = "royal blue")
         self.Label3A.pack()
 
         reminders = getReminder()
-        self.Label3B = Label(self.Frame3, text = "{}".format(reminders), font = "times 19",bg = "blue2")
+        self.Label3B = Label(self.Frame3, text = "{}".format(reminders), font = "times 19",bg = "royal blue")
         self.Label3B.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
         self.GUI.config(cursor = "none")
         self.GUI.mainloop()
         
-    
-
     # rain chance >= 60, RAINCOAT
     # rain chance >= 30, UMBRELLA
     # rain chance >= 75, BOTH
@@ -282,10 +343,7 @@ class GUI():
             self.Label1B.config(text = "{}".format(weatherData))
     
 
-
-
-
-
-
 ###### MAIN CODE #######
-keyboardGUI()
+def main():
+    keyboardGUI()
+
