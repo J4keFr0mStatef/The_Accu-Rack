@@ -14,8 +14,8 @@ class Weather:
         self.city = city
         self.info = {}
         self.unit = unit
-        self.refresh = True
-
+        # SETTING THIS TO TRUE CAUSES SEVERE PERFOMANCE ISSUES
+        self.refresh = False
 
     # accessor and mutator for city
     @property
@@ -56,8 +56,8 @@ class Weather:
             # we have to manipulate the JSON to access the correct part of the dictionary
             # that has the weather data we need
             data = response.json()
-            list = data["list"]
-            self.info = dict(list[0])
+            list1 = data["list"]
+            self.info = dict(list1[0])
         else:
             raise NameError("There was an invalid response from the OpenWeatherMap server")
     
@@ -94,7 +94,11 @@ class Weather:
         if self.refresh:
             self.ping()
         chance = self.info["pop"]
-        return chance
+        return float(chance)
+
+    def giveInfo(self):
+        self.ping()
+        return self.getTemp(), self.getHumidity(), self.getRainChance()
 
     def __str__(self):
         # always refresh data before printing it
@@ -110,3 +114,19 @@ class Weather:
 
 ########################################################################
 
+if __name__ == "__main__":
+    weatherData = Weather("Ruston")
+
+    print(weatherData)
+
+    chance = weatherData.getRainChance()
+    print(chance)
+
+    weatherData.ping()
+    print(weatherData.getTemp())
+
+    weatherData.ping()
+    t, h, r = weatherData.giveInfo()
+    print(t)
+    print(h)
+    print(r)
