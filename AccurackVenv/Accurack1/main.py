@@ -30,7 +30,6 @@ class Coathook:
     # input pin to a specific coat
     coats = {"umbrella": 4, "raincoat": 25, "light coat": 24, "heavy coat": 5}
     leds = {"umbrella": 17, "raincoat": 16, "light coat": 13, "heavy coat": 12}
-    exit_event = threading.Event()
 
     def __init__(self):
         self.setupGPIO()
@@ -67,41 +66,44 @@ class Coathook:
     # it is logically identitcal to the GUI's recommend function
     def recommend(self):
         recommendation = None
+
+        temperature, humidity, rainPOP = weatherData.giveInfo()
+        
         # recommendation logic for Fahrenheit
         if (weatherData.unit == "imperial"):
-            if (weatherData.getRainChance() >= 0.7) and (weatherData.getTemp() >= 32):
+            if (rainPOP >= 0.7) and (temperature >= 32):
                 # RAINCOAT & UMBRELLA
                 recommendation = self.leds["raincoat"]
                 recommendation = self.leds["umbrella"]
-            elif (weatherData.getRainChance() >= 0.55) and (weatherData.getTemp() >= 32):
+            elif (rainPOP >= 0.55) and (temperature >= 32):
                 # "RAINCOAT"
                 recommendation = self.leds["raincoat"]
-            elif (weatherData.getRainChance() >= 0.3) and (weatherData.getTemp() >= 32):
+            elif (rainPOP >= 0.3) and (temperature >= 32):
                 # "UMBRELLA"
                 recommendation = self.leds["umbrella"]
-            elif (weatherData.getTemp() <= 45):
+            elif (temperature <= 45):
                 # "HEAVY COAT"
                 recommendation = self.leds["heavy coat"]
-            elif (weatherData.getTemp() <= 65):
+            elif (temperature <= 65):
                 # "LIGHT COAT"
                 recommendation = self.leds["light coat"]
             
         # recommendation logic for Celsius
         else:
-            if (weatherData.getRainChance() >= 0.7) and (weatherData.getTemp() >= 0):
+            if (rainPOP >= 0.7) and (temperature >= 0):
                 # RAINCOAT & UMBRELLA
                 recommendation = self.leds["raincoat"]
                 recommendation = self.leds["umbrella"]
-            elif (weatherData.getRainChance() >= 0.55) and (weatherData.getTemp() >= 0):
+            elif (rainPOP >= 0.55) and (temperature >= 0):
                 # "RAINCOAT"
                 recommendation = self.leds["raincoat"]
-            elif (weatherData.getRainChance() >= 0.3) and (weatherData.getTemp() >= 0):
+            elif (rainPOP >= 0.3) and (temperature >= 0):
                 # "UMBRELLA"
                 recommendation = self.leds["umbrella"]
-            elif (weatherData.getTemp() <= 8):
+            elif (temperature <= 8):
                 # "HEAVY COAT"
                 recommendation = self.leds["heavy coat"]
-            elif (weatherData.getTemp() <= 16):
+            elif (temperature <= 16):
                 # "LIGHT COAT"
                 recommendation = self.leds["light coat"]
 
@@ -126,7 +128,6 @@ class Coathook:
             position = ledsKeyList[ledsValList.index(rec)]
             # blink the led of the recommended
             if GPIO.input(self.coats[position]) == 0:
-                global test
                 test = threading.Thread(target=self.blink, args=(rec,), daemon=True)
                 test.start()
         except:
@@ -379,33 +380,36 @@ class GUI():
     def recommendCoat(self):
         # refresh LEDs
         coathanger.letThereBeLight()
+        
+        temperature, humidity, rainPOP = weatherData.giveInfo()
+        
         s = "I recommend you take a(n)\n"
         # logic for Fahrenheit
         if (weatherData.unit == "imperial"):
-            if (weatherData.getRainChance() >= 0.7) and (weatherData.getTemp() >= 32):
+            if (rainPOP >= 0.7) and (temperature >= 32):
                 s = "I recommend both an\nUMBRELLA and a RAIN COAT"
-            elif (weatherData.getRainChance() >= 0.55) and (weatherData.getTemp() >= 32):
+            elif (rainPOP >= 0.55) and (temperature >= 32):
                 s += "RAINCOAT"
-            elif (weatherData.getRainChance() >= 0.3) and (weatherData.getTemp() >= 32):
+            elif (rainPOP >= 0.3) and (temperature >= 32):
                 s += "UMBRELLA"
-            elif (weatherData.getTemp() <= 45):
+            elif (temperature <= 45):
                 s += "HEAVY COAT"
-            elif (weatherData.getTemp() <= 65):
+            elif (temperature <= 65):
                 s += "LIGHT COAT"
             else:
                 s = "It looks like you're good\nto go today!\nHave a great day!"
 
         # logic for celsius
         else:
-            if (weatherData.getRainChance() >= 0.75) and (weatherData.getTemp() >= 0):
+            if (rainPOP >= 0.7) and (temperature >= 0):
                 s = "I recommend both an\nUMBRELLA and a RAIN COAT"
-            elif (weatherData.getRainChance() >= 0.6) and (weatherData.getTemp() >= 0):
+            elif (rainPOP >= 0.55) and (temperature >= 0):
                 s += "RAINCOAT"
-            elif (weatherData.getRainChance() >= 0.3) and (weatherData.getTemp() >= 0):
+            elif (rainPOP >= 0.3) and (temperature >= 0):
                 s += "UMBRELLA"
-            elif (weatherData.getTemp() <= 8):
+            elif (temperature <= 8):
                 s += "HEAVY COAT"
-            elif (weatherData.getTemp() <= 16):
+            elif (temperature <= 16):
                 s += "LIGHT COAT"
             else:
                 s = "It looks like you're good\nto go today!\nHave a great day!"
@@ -418,7 +422,9 @@ class GUI():
         
     # refreshes all the weather data
     def refresh(self):
-        weatherData = Weather("{}".format(CITY.get()))
+        global weatherData
+        unit = weatherData.unit
+        weatherData = Weather("{}".format(CITY.get()), unit)
         coathanger.letThereBeLight()
 
         self.Label1A.config(text = "{}".format(CITY.get()))
@@ -441,6 +447,8 @@ class GUI():
         else:
             weatherData = Weather("{}".format(CITY.get()), "imperial")
             self.Label1B.config(text = "{}".format(weatherData))
+            
+        self.refresh()
     
 
 ######### MAIN CODE ##########
