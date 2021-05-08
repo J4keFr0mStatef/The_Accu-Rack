@@ -22,7 +22,6 @@ weatherData = None
 #Boolean to turn off and on fullscreen for debugging
 FULLSCREEN = True
 
-
 # the Coathook class encompasses the entire GUI
 # it is a class so that it has self-sustained
 # variables.
@@ -31,7 +30,7 @@ class Coathook:
     # input pin to a specific coat
     coats = {"umbrella": 4, "raincoat": 25, "light coat": 24, "heavy coat": 5}
     leds = {"umbrella": 17, "raincoat": 16, "light coat": 13, "heavy coat": 12}
-    stopBlink = False
+    exit_event = threading.Event()
 
     def __init__(self):
         self.setupGPIO()
@@ -55,10 +54,14 @@ class Coathook:
 
     # func used to blink an LED for a recommended coat
     def blink(self, led):
-       GPIO.output(led, GPIO.LOW)
-       delay(0.3)
-       GPIO.output(led, GPIO.HIGH)
-       delay(0.3)
+        while (GPIO.input(led) == 1):
+            check = coathanger.recommend()
+            GPIO.output(led, GPIO.LOW)
+            delay(0.5)
+            GPIO.output(led, GPIO.HIGH)
+            delay(0.5)
+            if (check != led):
+                break
 
     # this func controls the logic for which coat is recommended
     # it is logically identitcal to the GUI's recommend function
@@ -82,7 +85,7 @@ class Coathook:
             elif (weatherData.getTemp() <= 65):
                 # "LIGHT COAT"
                 recommendation = self.leds["light coat"]
-                
+            
         # recommendation logic for Celsius
         else:
             if (weatherData.getRainChance() >= 0.7) and (weatherData.getTemp() >= 0):
@@ -116,11 +119,19 @@ class Coathook:
             else:
                 GPIO.output(self.leds[coat], GPIO.HIGH)
 
-        ledsKeyList = list(self.leds.keys())
-        ledsValList = list(self.leds.values())
-        position = ledsKeyList[ledsValList.index(rec)]
-        while (GPIO.input(self.coats[position]) == 0):
-            self.blink(self.leds[position])
+        try:
+            # find the coat tied to the led pin that was recommended
+            ledsKeyList = list(self.leds.keys())
+            ledsValList = list(self.leds.values())
+            position = ledsKeyList[ledsValList.index(rec)]
+            # blink the led of the recommended
+            if GPIO.input(self.coats[position]) == 0:
+                global test
+                test = threading.Thread(target=self.blink, args=(rec,), daemon=True)
+                test.start()
+        except:
+            pass
+            
 
 # keyboard class allows for user input of a city
 class keyboardGUI:
@@ -405,11 +416,10 @@ class GUI():
         coathanger.letThereBeLight()
         self.GUI.destroy()
         
-
     # refreshes all the weather data
     def refresh(self):
-        coathanger.letThereBeLight()
         weatherData = Weather("{}".format(CITY.get()))
+        coathanger.letThereBeLight()
 
         self.Label1A.config(text = "{}".format(CITY.get()))
         self.Label1B.config(text = "{}".format(weatherData))
