@@ -9,11 +9,12 @@
 from weather_class import *
 from Google_Calendar_API import *
 # import external libraries
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import requests
 from tkinter import *
 from tkinter import ttk
 from time import sleep as delay
+import threading
 
 #create variable to contain the weather data from the weather API. 
 weatherData = None
@@ -21,70 +22,119 @@ weatherData = None
 #Boolean to turn off and on fullscreen for debugging
 FULLSCREEN = True
 
-# class Coathook:
-#     coats = {"umbrella": 4, "raincoat": 25, "light coat": 24, "heavy coat": 5}
-#     leds = {"umbrella": 17, "raincoat": 16, "light coat": 13, "heavy coat": 12}
+# the Coathook class encompasses the entire GUI
+# it is a class so that it has self-sustained
+# variables.
+class Coathook:
+    # dictionary that matches every LED pin and limit switch
+    # input pin to a specific coat
+    coats = {"umbrella": 4, "raincoat": 25, "light coat": 24, "heavy coat": 5}
+    leds = {"umbrella": 17, "raincoat": 16, "light coat": 13, "heavy coat": 12}
 
-#     def __init__(self):
-#         self.setupGPIO()
-#         self.letThereBeLight()
-    
-#     def setupGPIO(self):
-#         GPIO.setmode(GPIO.BCM)
-#         GPIO.setwarnings(False)
+    def __init__(self):
+        self.setupGPIO()
+
+    # create all the GPIO pins and initialise them
+    def setupGPIO(self):
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+       
+        # setup the GPIO for the limit switches
+        for coat in self.coats:
+            GPIO.setup(self.coats[coat], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        # setup the GPIO for the LEDs
+        for led in self.leds:
+            GPIO.setup(self.leds[led], GPIO.OUT)
+        # event listener module allows detection for
+        # limit switch input pins so the LEDs can update
+        # every time one is pressed
+        for coat in self.coats:
+            GPIO.add_event_detect(self.coats[coat], GPIO.BOTH, callback=self.letThereBeLight)
+
+    # func used to blink an LED for a recommended coat
+    def blink(self, led):
+        while (GPIO.input(led) == 1):
+            check = coathanger.recommend()
+            GPIO.output(led, GPIO.LOW)
+            delay(0.5)
+            GPIO.output(led, GPIO.HIGH)
+            delay(0.5)
+            if (check != led):
+                break
+
+    # this func controls the logic for which coat is recommended
+    # it is logically identitcal to the GUI's recommend function
+    def recommend(self):
+        recommendation = None
+
+        temperature, humidity, rainPOP = weatherData.giveInfo()
         
-#         # setup the GPIO for the limit switches
-#         for coat in self.coats:
-#             GPIO.setup(self.coats[coat], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-#         # setup the GPIO for the LEDs
-#         for led in self.leds:
-#             GPIO.setup(self.leds[led], GPIO.OUT)
+        # recommendation logic for Fahrenheit
+        if (weatherData.unit == "imperial"):
+            if (rainPOP >= 0.7) and (temperature >= 32):
+                # RAINCOAT & UMBRELLA
+                recommendation = self.leds["raincoat"]
+                recommendation = self.leds["umbrella"]
+            elif (rainPOP >= 0.55) and (temperature >= 32):
+                # "RAINCOAT"
+                recommendation = self.leds["raincoat"]
+            elif (rainPOP >= 0.3) and (temperature >= 32):
+                # "UMBRELLA"
+                recommendation = self.leds["umbrella"]
+            elif (temperature <= 45):
+                # "HEAVY COAT"
+                recommendation = self.leds["heavy coat"]
+            elif (temperature <= 65):
+                # "LIGHT COAT"
+                recommendation = self.leds["light coat"]
+            
+        # recommendation logic for Celsius
+        else:
+            if (rainPOP >= 0.7) and (temperature >= 0):
+                # RAINCOAT & UMBRELLA
+                recommendation = self.leds["raincoat"]
+                recommendation = self.leds["umbrella"]
+            elif (rainPOP >= 0.55) and (temperature >= 0):
+                # "RAINCOAT"
+                recommendation = self.leds["raincoat"]
+            elif (rainPOP >= 0.3) and (temperature >= 0):
+                # "UMBRELLA"
+                recommendation = self.leds["umbrella"]
+            elif (temperature <= 8):
+                # "HEAVY COAT"
+                recommendation = self.leds["heavy coat"]
+            elif (temperature <= 16):
+                # "LIGHT COAT"
+                recommendation = self.leds["light coat"]
 
-#         for coat in self.coats:
-#             GPIO.add_event_detect(self.coats[coat], GPIO.BOTH, callback=self.letThereBeLight)
+        return recommendation
 
-#     def blink(self, led):
-#         GPIO.output(led, GPIO.LOW)
-#         delay(0.3)
-#         GPIO.output(led, GPIO.HIGH)
-#         delay(0.3)
+    # the most fundamental function to the coatrack's switches
+    # this function updates all the switches' current states
+    def letThereBeLight(self, _=None):
+        # check to see if coats are on the rack
+        rec = self.recommend()
+        for coat in self.coats:
+            #if the coat is not there, turn the light off
+            if (GPIO.input(self.coats[coat]) == 1):
+                GPIO.output(self.leds[coat], GPIO.LOW)
+            else:
+                GPIO.output(self.leds[coat], GPIO.HIGH)
 
-#     def recommend(self):
-#         recommendation = None
-#         if (True):
-#             if (weatherData.getRainChance() >= 0.75) and (weatherData.getTemp() >= 32):
-#                 # RAINCOAT & UMBRELLA
-#                 recommendation = self.leds["raincoat"]
-#                 recommendation = self.leds["umbrella"]
-#             elif (weatherData.getRainChance() >= 0.6) and (weatherData.getTemp() >= 32):
-#                 # "RAINCOAT"
-#                 recommendation = self.leds["raincoat"]
-#             elif (weatherData.getRainChance() >= 0.3) and (weatherData.getTemp() >= 32):
-#                 # "UMBRELLA"
-#                 recommendation = self.leds["umbrella"]
-#             elif (weatherData.getTemp() <= 35):
-#                 # "HEAVY COAT"
-#                 recommendation = self.leds["heavy coat"]
-#             elif (weatherData.getTemp() <= 60):
-#                 # "LIGHT COAT"
-#                 recommendation = self.leds["light coat"]
-#             return recommendation
+        try:
+            # find the coat tied to the led pin that was recommended
+            ledsKeyList = list(self.leds.keys())
+            ledsValList = list(self.leds.values())
+            position = ledsKeyList[ledsValList.index(rec)]
+            # blink the led of the recommended
+            if GPIO.input(self.coats[position]) == 0:
+                test = threading.Thread(target=self.blink, args=(rec,), daemon=True)
+                test.start()
+        except:
+            pass
+            
 
-#     def letThereBeLight(self, _=None):
-#         # check to see if coats are on the rack
-#         rec = self.recommend()
-#         for coat in self.coats:
-#             #if the coat is not there, turn the light off
-#             if (GPIO.input(self.coats[coat]) == 1):
-#                 GPIO.output(self.leds[coat], GPIO.LOW)
-#             else:
-#                 if rec == self.leds[coat]:
-#                     while (GPIO.input(self.coats[coat]) == 0):
-#                         self.blink(self.leds[coat])
-#                 else:
-#                     GPIO.output(self.leds[coat], GPIO.HIGH)
-
-
+# keyboard class allows for user input of a city
 class keyboardGUI:
     #constructor
     def __init__(self):
@@ -253,8 +303,9 @@ class keyboardGUI:
 class GUI():
     #constructor
     def __init__(self):
-        # GPIO.cleanup()
-        # coathanger = Coathook()
+        GPIO.cleanup()
+        global coathanger
+        coathanger = Coathook()
         self.setUpGUI()
     
     def setUpGUI(self):
@@ -320,38 +371,61 @@ class GUI():
         
         self.GUI.config(cursor = "none") #disable the user's cursor
         self.GUI.mainloop() #loop GUI
-        
-    # rain chance >= 60, RAINCOAT
-    # rain chance >= 30, UMBRELLA
-    # rain chance >= 75, BOTH
-    # temp < 60 and rain chance <30, LIGHT COAT
-    # temp < 35, HEAVY COAT
-    def recommendCoat(self):
-        weatherData.ping()
-        s = "I recommend you take a(n)\n"
-        if (weatherData.getRainChance() >= 0.75) and (weatherData.getTemp() >= 32):
-            s = "I recommend both an\nUMBRELLA and a RAIN COAT"
-        elif (weatherData.getRainChance() >= 0.6) and (weatherData.getTemp() >= 32):
-            s += "RAINCOAT"
-        elif (weatherData.getRainChance() >= 0.3) and (weatherData.getTemp() >= 32):
-            s += "UMBRELLA"
-        elif (weatherData.getTemp() <= 35):
-            s += "HEAVY COAT"
-        elif (weatherData.getTemp() <= 60):
-            s += "LIGHT COAT"
-        else:
-            s = "It looks like you're good\nto go today!\nHave a great day!"
 
+        coathanger.letThereBeLight()
+        
+    # function to recommend coats on-screen
+    # this function handles the logic and returns a string
+    # that recommends the coat
+    def recommendCoat(self):
+        # refresh LEDs
+        coathanger.letThereBeLight()
+        
+        temperature, humidity, rainPOP = weatherData.giveInfo()
+        
+        s = "I recommend you take a(n)\n"
+        # logic for Fahrenheit
+        if (weatherData.unit == "imperial"):
+            if (rainPOP >= 0.7) and (temperature >= 32):
+                s = "I recommend both an\nUMBRELLA and a RAIN COAT"
+            elif (rainPOP >= 0.55) and (temperature >= 32):
+                s += "RAINCOAT"
+            elif (rainPOP >= 0.3) and (temperature >= 32):
+                s += "UMBRELLA"
+            elif (temperature <= 45):
+                s += "HEAVY COAT"
+            elif (temperature <= 65):
+                s += "LIGHT COAT"
+            else:
+                s = "It looks like you're good\nto go today!\nHave a great day!"
+
+        # logic for celsius
+        else:
+            if (rainPOP >= 0.7) and (temperature >= 0):
+                s = "I recommend both an\nUMBRELLA and a RAIN COAT"
+            elif (rainPOP >= 0.55) and (temperature >= 0):
+                s += "RAINCOAT"
+            elif (rainPOP >= 0.3) and (temperature >= 0):
+                s += "UMBRELLA"
+            elif (temperature <= 8):
+                s += "HEAVY COAT"
+            elif (temperature <= 16):
+                s += "LIGHT COAT"
+            else:
+                s = "It looks like you're good\nto go today!\nHave a great day!"
         return s
     
     # change city function
     def changeCity(self):
+        coathanger.letThereBeLight()
         self.GUI.destroy()
         
-
-    # refresh function
+    # refreshes all the weather data
     def refresh(self):
-        weatherData = Weather("{}".format(CITY.get()))
+        global weatherData
+        unit = weatherData.unit
+        weatherData = Weather("{}".format(CITY.get()), unit)
+        coathanger.letThereBeLight()
 
         self.Label1A.config(text = "{}".format(CITY.get()))
         self.Label1B.config(text = "{}".format(weatherData))
@@ -366,12 +440,15 @@ class GUI():
     # °F/°C change function
     def changeTemp(self):
         global weatherData
+        coathanger.letThereBeLight()
         if weatherData.unit == "imperial":
             weatherData = Weather("{}".format(CITY.get()), "metric")
             self.Label1B.config(text = "{}".format(weatherData))
         else:
             weatherData = Weather("{}".format(CITY.get()), "imperial")
             self.Label1B.config(text = "{}".format(weatherData))
+            
+        self.refresh()
     
 
 ######### MAIN CODE ##########
