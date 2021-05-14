@@ -1,3 +1,12 @@
+'''
+THIS FILE OF CODE SERVES TO ACT AS A TESTING GROUND FOR GETTING THE GPIO READY
+AND IN A FUNCTIONAL STATE.  IT IS NOT INCLUDED IN THE MAIN PART OF THE CODE
+WHATSOEVER.  
+
+THE METHODS USED HERE ARE NOT EXAMPLES OF WHAT THE GPIO IN THE CODE LOOKS
+LIKE
+'''
+
 import RPi.GPIO as GPIO
 from time import delay
 
@@ -18,7 +27,6 @@ def setupGPIO():
     GPIO.setup(leds["heavy coat"], GPIO.OUT)
 
     return coats, leds
->>>>>>> Stashed changes
 
 def blink(led):
     GPIO.output(led, GPIO.HIGH)
