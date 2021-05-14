@@ -57,7 +57,7 @@ Reference Code: https://karenapp.io/articles/how-to-automate-google-calendar-wit
       This is the bulk of the code in main.py and took the most work.
 
 ### Circuits ###
-    -https://github.com/J4keFr0mStatef/The_Accu-Rack/tree/main/Documentation/Circuits
+    - https://github.com/J4keFr0mStatef/The_Accu-Rack/tree/main/Documentation/Circuits
 
 ### Known Bugs ###
 - For some reason, dispite being a clear day in the middle of a desert, it will recommend a raincoat in Las Vegas.
