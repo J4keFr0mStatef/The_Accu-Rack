@@ -5,6 +5,20 @@
 #COMPLETION DATE: 5/11/2021 
 ######################################################################################################
 
+'''
+PLEASE NOTE THAT THIS VERSION OF THE CODE IS SLIGHTLY OUT-OF-DATE.
+THE ACCU-RACK HAS THE MOST UP-TO-DATE VERSION OF THE CODE AND IT MAY NOT HAVE BEEN
+UPLOADED DIRECTLY FROM THE PI TO THE GITHUB DUE TO OUR 
+FLIGHT-OF-THE-BUMBLEBEE RUSH TO GET THE CODE IN A FULLY FUNCTIONAL STATE.
+
+SOME OF THE METHODS SEEN IN THIS VERSION OF THE CODE HAVE BEEN REPLACED WITH 
+OTHER METHODS (E.G. WITH THE FAHRENHEIT/CELSIUS LOGIC FOR THE LED BLINKING RECOMMENDATIONS, IT WILL NOT WORK
+IN ITS CURRENT STATE. I HAVE FIXED IT SINCE, ALBEIT DIRECTLY ON THE PI). IF YOU HAVE ANY QUESTIONS ABOUT
+SOME THINGS THAT I DID DIFFERENTLY SINCE, DO NOT HESITATE TO CONTACT ME AT tjk010@latech.edu
+
+-- Travis Knippers
+'''
+
 # import our written libraries
 from weather_class import *
 from Google_Calendar_API import *
@@ -16,10 +30,10 @@ from tkinter import ttk
 from time import sleep as delay
 import threading
 
-#create variable to contain the weather data from the weather API. 
+# create variable to contain the weather data from the weather API. 
 weatherData = None
 
-#Boolean to turn off and on fullscreen for debugging
+# boolean to turn off and on fullscreen for debugging
 FULLSCREEN = True
 
 # the Coathook class encompasses the entire GUI
@@ -36,29 +50,32 @@ class Coathook:
 
     # create all the GPIO pins and initialise them
     def setupGPIO(self):
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BCM)  # setup for breakout board pins
+        GPIO.setwarnings(False) # reduce unwanted warnings in terminal
        
-        # setup the GPIO for the limit switches
+        # setup the GPIO for the limit switches as inputs
         for coat in self.coats:
             GPIO.setup(self.coats[coat], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        # setup the GPIO for the LEDs
+        # setup the GPIO for the LEDs as outputs
         for led in self.leds:
             GPIO.setup(self.leds[led], GPIO.OUT)
+
         # event listener module allows detection for
         # limit switch input pins so the LEDs can update
-        # every time one is pressed
+        # every time one is pressed/depressed
         for coat in self.coats:
             GPIO.add_event_detect(self.coats[coat], GPIO.BOTH, callback=self.letThereBeLight)
 
     # func used to blink an LED for a recommended coat
     def blink(self, led):
         while (GPIO.input(led) == 1):
+            # create a check variable that ensures up-to-date recommendations
             check = coathanger.recommend()
             GPIO.output(led, GPIO.LOW)
             delay(0.5)
             GPIO.output(led, GPIO.HIGH)
             delay(0.5)
+            # use the check varible to decide whether or not to continue running
             if (check != led):
                 break
 
@@ -66,12 +83,14 @@ class Coathook:
     # it is logically identitcal to the GUI's recommend function
     def recommend(self):
         recommendation = None
-
+        
+        # get wanted information from weather_class API handler
         temperature, humidity, rainPOP = weatherData.giveInfo()
         
         # recommendation logic for Fahrenheit
         if (weatherData.unit == "imperial"):
             if (rainPOP >= 0.7) and (temperature >= 32):
+                # TODO: fix recommending a raincoat AND umbrella, lights get confused
                 # RAINCOAT & UMBRELLA
                 recommendation = self.leds["raincoat"]
                 recommendation = self.leds["umbrella"]
@@ -128,8 +147,8 @@ class Coathook:
             position = ledsKeyList[ledsValList.index(rec)]
             # blink the led of the recommended
             if GPIO.input(self.coats[position]) == 0:
-                test = threading.Thread(target=self.blink, args=(rec,), daemon=True)
-                test.start()
+                blinker = threading.Thread(target=self.blink, args=(rec,), daemon=True)
+                blinker.start()
         except:
             pass
             
@@ -381,6 +400,7 @@ class GUI():
         # refresh LEDs
         coathanger.letThereBeLight()
         
+        # get processable information from the weather_data API class
         temperature, humidity, rainPOP = weatherData.giveInfo()
         
         s = "I recommend you take a(n)\n"
