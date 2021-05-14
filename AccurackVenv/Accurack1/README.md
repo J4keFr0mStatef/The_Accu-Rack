@@ -26,11 +26,17 @@ https://github.com/J4keFr0mStatef/The_Accu-Rack
 
 ### Features ###
 -Temperature
+
 -Humidity
+
 -Integration of google calendar with planned events for the day
+
 -A button to change between Farenheit and Celsius
+
 -A refresh button to refresh information displayed
+
 -A recommendation of what weather apparel to wear
+
 -A button that allows a change of city
 
 ### API Documentation ###
