@@ -29,7 +29,7 @@ https://github.com/J4keFr0mStatef/The_Accu-Rack
 
 -Humidity
 
--Integration of google calendar with planned events for the day
+-Integration of Google calendar with planned events for the day
 
 -A button to change between Farenheit and Celsius
 
