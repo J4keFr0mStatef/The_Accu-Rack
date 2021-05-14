@@ -9,3 +9,9 @@
 2. Documentation
   - Contains the circuit diagrams
   - Contains the schematics
+
+
+### NOTE TO DEVS ###
+After CSC 132 has concluded, if any more work is done to the Accu-Rack
+please try push the changes to the repository. It would be nice to see the improvements made to it
+after the expo has long since passed.
