@@ -59,9 +59,18 @@ Reference Code: https://karenapp.io/articles/how-to-automate-google-calendar-wit
 ### Circuit ###
 
 ### Known Bugs ###
-- Recommendation of coat does not change until the coat is removed
+- For some reason, dispite being a clear day in the middle of a desert, it will recommend a raincoat in Las Vegas.
 
-- Changing cities with coats on the rack will sometimes cause a crash
+### Fixes ###
+- Recommendation of coat does not change until the coat is removed (FIXED)
 
-- The coats are only recommended for Fahrenheit
+- Changing cities with coats on the rack will sometimes cause a crash (FIXED)
+
+- The coats are only recommended for Fahrenheit (FIXED)
+
+- Overall speed of the accurack was improved from earlier versions, but it caused few bugs with recommendations (FIXED)
+
+### Features to be Added ###
+- An automatic refesh feature that will refresh the weather info to stay up to date.
+- The ability to change Google accounts to link with the Google calendar.
 
