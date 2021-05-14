@@ -80,4 +80,4 @@ Reference Code: https://karenapp.io/articles/how-to-automate-google-calendar-wit
 ### Features to be Added ###
 - An automatic refesh feature that will refresh the weather info to stay up to date.
 - The ability to change Google accounts to link with the Google calendar.
-
+- This is a big addition that is definitely out of scope of the other two, but an app that is integrated with The Accu-Rack.
